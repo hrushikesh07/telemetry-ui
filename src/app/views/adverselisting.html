@@ -17,7 +17,7 @@
                     <button type="button" ng-switch-default class="btn btn-block bg-purple no-pointer">Error</button>
 
                 </td>
-                <td data-title="ELK Link" class="blue align-center"><span><i class="fa fa-fw fa-bar-chart"></i></span</td>
+                <td data-title="ELK Link" class="blue align-center"><span><a href="{{getElkLink(data)}}" target="_blank"><i class="fa fa-fw fa-bar-chart"></i></a></span></td>
                 <td data-title="Event Time" class="align-center">{{data.timestamp * 1000| date:'medium'}}</td>
                 <td data-title="Event Description">{{data.reason}}</td>
             </tr>

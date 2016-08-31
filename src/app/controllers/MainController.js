@@ -55,9 +55,9 @@
             .then(function (menuItems) {
                 vm.menuItems = [].concat(menuItems);
             });
-
-        telemetryService.getAccount().then(function (response) {
-            vm.accounts = response.data.messageBody;
+        var url = '/accounts';
+        telemetryService. promiseGet(url).then(function (response) {
+            vm.accounts = response.messageBody;
             vm.selectedAccount = vm.accounts[0].accountName;
         }, function () {
 

@@ -8,26 +8,23 @@
         ]);
 
     function telemetryService($q,$http) {
-        var baseAPIUrl = 'http://telemetry.rlcatalyst.com';
+        //var baseAPIUrl = 'http://telemetry.rlcatalyst.com';
+        var baseAPIUrl = 'http://52.88.77.29:8080';
         function fullUrl(relUrl) {
             return baseAPIUrl + relUrl;
         }
+
         var serviceInterface = {
-            getAccount: function () {
-                var url = '/accounts';
-                return $http.get(fullUrl(url));
-            },
-            getCatsEye: function () {
-                var url = '/catseye';
-                return $http.get(fullUrl(url));
-            },
-            getListInstances: function () {
-                var url = '/list_instances';
-                return $http.get(fullUrl(url));
-            },
-            getAlertHistory: function () {
-                var url = '/alerthistory';
-                return $http.get(fullUrl(url));
+            promiseGet : function (url) {
+                    var deferred = $q.defer();
+                $http.get(fullUrl(url))
+                    .success(function(data) {
+                            deferred.resolve(data);
+                    })
+                    .error(function(data, status) {
+                            deferred.reject();
+                    });
+                return deferred.promise;
             },
             getRemediationHistory: function () {
                 var url = '/remediation_history';

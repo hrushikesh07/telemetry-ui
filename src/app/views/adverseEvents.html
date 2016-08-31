@@ -38,6 +38,8 @@
                         <div class="col-sm-9">
                             <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instanceId">
                                 <option selected="selected" value=''>All</option>
+                                <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceId}}</option>
+
                             </select>
                         </div>
                     </div> 

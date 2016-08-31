@@ -12,9 +12,9 @@
         $scope.catsEyeData = {};
         
         $scope.dataloading = true;
-        
-        telemetryService.getCatsEye().then(function (response) {
-            $scope.catsEyeData = response.data.messageBody;
+        var url = '/catseye';
+        telemetryService. promiseGet(url).then(function (response) {
+            $scope.catsEyeData = response.messageBody;
             $scope.dataloading = false;
         }, function () {
 

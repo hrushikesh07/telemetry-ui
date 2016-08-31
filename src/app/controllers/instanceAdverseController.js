@@ -28,8 +28,9 @@
         
         $scope.dataloading = true;
 
-        telemetryService.getAlertHistory().then(function (response) {
-            var allAlerts = response.data.messageBody;
+        var url = '/alerthistory';
+        telemetryService. promiseGet(url).then(function (response) {
+            var allAlerts = response.messageBody;
             for (var j = 0; j < allAlerts.length; j++) {
                 if ($scope.instanceData.instanceId === allAlerts[j].instanceId) {
                     $scope.alerts.push(allAlerts[j]);

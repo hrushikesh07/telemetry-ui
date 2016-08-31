@@ -25,11 +25,11 @@
 
         $scope.dataloading = true;
 
-        telemetryService.getListInstances().then(function (response) {
-            $scope.instances = response.data.messageBody;
+        var url = '/list_instances';
+        telemetryService. promiseGet(url).then(function (response) {
+            $scope.instances = response.messageBody;
             $scope.dataloading = false;
         }, function () {
-
         });
 
 

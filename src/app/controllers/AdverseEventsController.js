@@ -23,12 +23,27 @@
         $scope.instanceFilter = true;
         
         $scope.alerts = [];
-        
-        $scope.dataloading = true;
-        
-        telemetryService.getAlertHistory().then(function (response) {
-            $scope.alerts = response.data.messageBody;
+
+        var urList = '/list_instances';
+        telemetryService. promiseGet(urList).then(function (response) {
+            $scope.instances = response.messageBody;
             $scope.dataloading = false;
+        }, function () {
+        });
+        $scope.getElkLink = function(alertData) {
+            var timeStamp = new Date(alertData.timestamp * 1000);
+            var timeStampIso = timeStamp.toISOString();
+            var timeStampMinus = new Date((alertData.timestamp * 1000) - (5 * 60 * 1000));
+            var timeStampMinusIso = timeStampMinus.toISOString();
+            var elkLink = "http://elk.rlcatalyst.com/search/" + alertData.instanceId + "/" + timeStampMinusIso + "/" + timeStampIso;
+            return encodeURI(elkLink);
+        };
+        $scope.dataloading = true;
+        var url = '/alerthistory';
+        telemetryService. promiseGet(url).then(function (response) {
+            $scope.alerts = response.messageBody;
+            $scope.dataloading = false;
+
         }, function () {
 
         });
