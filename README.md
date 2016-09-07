@@ -4,7 +4,7 @@ Install dependencies:
 
     $ cd telemetry-ui
     $ npm install
-    $ npm bower
+    $ bower install
 
 Install gem 'sass'
 
