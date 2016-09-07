@@ -2,8 +2,9 @@
 
 Install dependencies:
 
-    $ cd angular-material-dashboard
+    $ cd telemetry-ui
     $ npm install
+    $ npm bower
 
 Install gem 'sass'
 

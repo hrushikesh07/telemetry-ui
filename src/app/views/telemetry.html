@@ -8,64 +8,64 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-fw fa-filter"></i>Filter By</h3>
-            <div class="box-tools pull-right">
-                <button type="button" ng-click="resetFilter()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-fw fa-refresh"></i>Reset</button>
-            
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body form-horizontal">
-            <div class="row">
-                <div class="col-md-4">
-                                           <div class="form-group">
-                            <label for="selectState" class="col-sm-3 control-label">State:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control select2 select2-hidden-accessible" id="selectState" ng-model="filter.state">
-                                    <option selected="selected" value=''>All</option>
-                                    <option ng-value="running">Running</option>
-                                    <option ng-value="stopped">Stopped</option>
-                                    <option ng-value="terminated">Terminated</option>
-                                </select>
-                            </div>
-                        </div>                                        
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                            <label for="selectState" class="col-sm-3 control-label">Monitoring:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.monitoring">
-                                    <option selected="selected" value=''>All</option>
-                                    <option ng-value="true">Yes</option>
-                                    <option ng-value="false">No</option>
-                                </select>
-                            </div>
-                        </div> 
-                </div>
-                <div class="col-md-4">
-                   <div class="form-group">
-                            <label for="selectState" class="col-sm-3 control-label">Remediation:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control select2 select2-hidden-accessible" id="selectRemediation" ng-model="filter.remediation">
-                                    <option selected="selected" value=''>All</option>
-                                    <option ng-value="true">Yes</option>
-                                    <option ng-value="false">No</option>
-                                </select>
-                            </div>
-                        </div> 
-                </div>
-            </div>
-            <!-- /.row -->
-        </div>
-    </div>
+    <!--<div class="box box-default">-->
+        <!--<div class="box-header with-border">-->
+            <!--<h3 class="box-title"><i class="fa fa-fw fa-filter"></i>Filter By</h3>-->
+            <!--<div class="box-tools pull-right">-->
+                <!--<button type="button" ng-click="resetFilter()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-fw fa-refresh"></i>Reset</button>-->
+            <!---->
+          <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; /.box-header &ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="box-body form-horizontal">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                <!--&lt;!&ndash;&lt;!&ndash;<div class="col-md-4">&ndash;&gt;&ndash;&gt;-->
+                                           <!--&lt;!&ndash;&lt;!&ndash;<div class="form-group">&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">State:</label>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectState" ng-model="filter.state">&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="running">Running</option>&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="stopped">Stopped</option>&ndash;&gt;&ndash;&gt;-->
+                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="terminated">Terminated</option>&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;&lt;!&ndash;</select>&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;</div>                                        &ndash;&gt;&ndash;&gt;-->
+                <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">Monitoring:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.monitoring">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option ng-value="true">Yes</option>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option ng-value="false">No</option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div> &ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
+                   <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">Remediation:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectRemediation" ng-model="filter.remediation">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option ng-value="true">Yes</option>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<option ng-value="false">No</option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div> &ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash; /.row &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--</div>-->
     <div class="table-responsive-vertical table">
 
         <table id="table" class="table table-hover table-bordered text-center">
             <thead>
                 <tr>
-                    <th>Status</th>
+                    <!--<th>Status</th>-->
                     <th>Info</th>
                     <th>Instance ID</th>
                     <th>Instance Name</th>
@@ -77,12 +77,13 @@
             </thead>
             <tbody>
                 <tr ng-if="!dataloading" ng-repeat="data in filtered = (instances | filter: filter) | orderBy:'$index':true">
-                    <td data-title="ID">
-                        <span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped'}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
-                        <!--                        <span class="txt-green"><i class="fa fa-fw fa-rss fa-2x"></i></span>-->
-                    </td>
+                    <!--<td data-title="ID">-->
+                        <!--<span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped'}"><i class="fa fa-fw fa-flash fa-2x"></i></span>-->
+                        <!--&lt;!&ndash;                        <span class="txt-green"><i class="fa fa-fw fa-rss fa-2x"></i></span>&ndash;&gt;-->
+                    <!--</td>-->
                     <td data-title="Info"><span class="txt-blue"><i class="fa fa-fw fa-info-circle cursor-pointer fa-2x" ng-click="showIntanceAdverse(data.instanceId, data.instanceName);"></i></span</td>
-                    <td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>
+                    <!--<td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>-->
+                    <td data-title="Instance ID">{{data.instanceId}}</td>
                     <td data-title="Instance Name">{{data.instanceName}}</td>
                     <td data-title="Placement">{{data.placement}}</td>
                     <td data-title="Instance Type">{{data.instanceType}}</td>

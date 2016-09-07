@@ -25,7 +25,7 @@
 
         $scope.dataloading = true;
 
-        var url = '/list_instances';
+        var url = '/list_instances_running';
         telemetryService. promiseGet(url).then(function (response) {
             $scope.instances = response.messageBody;
             $scope.dataloading = false;

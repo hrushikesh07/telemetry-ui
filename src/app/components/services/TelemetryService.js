@@ -9,7 +9,8 @@
 
     function telemetryService($q,$http) {
         //var baseAPIUrl = 'http://telemetry.rlcatalyst.com';
-        var baseAPIUrl = 'http://52.88.77.29:8080';
+        // var baseAPIUrl = 'http://52.88.77.29:8080';
+       var baseAPIUrl = 'http://telemetry-api.rlcatalyst.com';
         function fullUrl(relUrl) {
             return baseAPIUrl + relUrl;
         }

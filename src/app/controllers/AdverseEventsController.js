@@ -24,7 +24,7 @@
         
         $scope.alerts = [];
 
-        var urList = '/list_instances';
+        var urList = '/list_instances_running';
         telemetryService. promiseGet(urList).then(function (response) {
             $scope.instances = response.messageBody;
             $scope.dataloading = false;
@@ -41,7 +41,13 @@
         $scope.dataloading = true;
         var url = '/alerthistory';
         telemetryService. promiseGet(url).then(function (response) {
-            $scope.alerts = response.messageBody;
+            angular.forEach(response.messageBody,function (value,key) {
+                if(value.status > 2){
+                    value.status =3;
+                }
+                $scope.alerts.push(value);
+            })
+           
             $scope.dataloading = false;
 
         }, function () {
@@ -50,10 +56,11 @@
         $scope.$on('alertEvent', function (event, args) {
             var data = args.message, existing = false, msg = '';
             console.log(data);
-//            for (var i = 0; i < data.length; i++) {
-//                $scope.alerts.push(args.message[i]);
-//            }
-//            $scope.$apply();
+            if(data && data.messageType=== "alert" && data.messageBody && data.messageBody.length >0 && data.messageBody.status > 2){
+                console.log(data.messageBody.reason);
+                toastr.error(data.messageBody.reason, 'Error');
+            }
+
         });
     }
 
