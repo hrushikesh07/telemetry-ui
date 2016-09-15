@@ -65,31 +65,32 @@
         <table id="table" class="table table-hover table-bordered text-center">
             <thead>
                 <tr>
-                    <!--<th>Status</th>-->
-                    <th>Info</th>
+                    <th>Status</th>
+                    <th>Events</th>
                     <th>Instance ID</th>
                     <th>Instance Name</th>
-                    <th>Placement</th>
+                    <th>Region</th>
                     <th>Instance Type</th>
                     <th>IP Address</th>
                     <th>UpTime</th>
+                    <th>Metrics</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-if="!dataloading" ng-repeat="data in filtered = (instances | filter: filter) | orderBy:'$index':true">
-                    <!--<td data-title="ID">-->
-                        <!--<span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped'}"><i class="fa fa-fw fa-flash fa-2x"></i></span>-->
-                        <!--&lt;!&ndash;                        <span class="txt-green"><i class="fa fa-fw fa-rss fa-2x"></i></span>&ndash;&gt;-->
-                    <!--</td>-->
-                    <td data-title="Info"><span class="txt-blue"><i class="fa fa-fw fa-info-circle cursor-pointer fa-2x" ng-click="showIntanceAdverse(data.instanceId, data.instanceName);"></i></span</td>
+                    <td data-title="Status">
+                        <span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped', 'txt-red': data.state == 'terminated'}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
+                    </td>
+                    <td data-title="Events"><span class="txt-blue"><i class="fa fa-fw fa-info-circle cursor-pointer fa-2x" ng-click="showIntanceAdverse(data.instanceId, data.instanceName);"></i></span</td>
                     <!--<td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>-->
                     <td data-title="Instance ID">{{data.instanceId}}</td>
                     <td data-title="Instance Name">{{data.instanceName}}</td>
-                    <td data-title="Placement">{{data.placement}}</td>
+                    <td data-title="Region">{{data.placement}}</td>
                     <td data-title="Instance Type">{{data.instanceType}}</td>
                     <td data-title="IP Address">{{data.publicIp}}<br />
                         {{data.privateIp}}</td>
                     <td data-title="UpTime">{{data.uptime}}</td>
+                    <td data-title="UpTime"><span class="cursor-pointer" ng-click="showIntanceMetrics(data.instanceId, data.instanceName);">Metrics</span></td>
                 </tr>
                 <tr ng-if="!dataloading && filtered.length === 0">
                     <td colspan="8" class="txt-red">

@@ -12,16 +12,18 @@
         <table id="table" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th>Ticket ID </th>
+                    <th>Instance ID </th>
                     <th>Timestamp</th>
+                    <th>Ticket ID </th>                    
                     <th>Log Message</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-if="!dataloading" ng-repeat="data in remediationData track by $index">
-                    <td data-title="ID"></td>
-                    <td data-title="Info" class="blue"><span class="txt-blue"><i class="fa fa-fw fa-info-circle"></i></span</td>
                     <td data-title="Instance ID">{{data.instanceId}}</td>
+                    <td data-title="Timestamp">{{data.timestamp * 1000| date:'medium'}}</td>
+                    <td data-title="Ticket"><a ng-href="{{data.ticketId}}" target="_blank">{{data.ticketId}}</a></td>
+                    <td data-title="Log Message">{{data.logMessage}}</td>
                 </tr>
                 <tr ng-if="!dataloading && remediationData.length === 0">
                     <td colspan="3" class="txt-red align-center">

@@ -106,16 +106,16 @@
             </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6" ng-hide="true">
+        <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
                     <h3>
-                        <span ng-if="!dataloading">{{catsEyeData.totalInstances}}</span>
+                        <span ng-if="!dataloading">{{catsEyeData.totalInstances - catsEyeData.catalystMonitored}}</span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Docker Containers</p>
+                    <p>Unmonitored AWS Instances</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-briefcase"></i>

@@ -33,6 +33,12 @@ body {
 
 /* Layout */
 
+.heading-title{
+    margin: 0 0 10px 0;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 5px;
+}
+
 a{
     cursor: pointer;
 }
@@ -65,6 +71,12 @@ a{
 .txt-red{
     color: #ff0000;
 }
+.txt-warning{
+    color: #f39c12;
+}
+.txt-purple{
+    color: #605ca8;
+}
 
 .font-20{
     font-size: 20px;
@@ -87,6 +99,8 @@ a{
         color: #f5f5f5;
     }
 }
+
+ a[disabled] {pointer-events: none;}
 
 .no-pointer{
     cursor: default;

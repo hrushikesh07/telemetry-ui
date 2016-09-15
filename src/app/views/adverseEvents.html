@@ -23,12 +23,12 @@
                     <div class="form-group">
                         <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status" ng-change="resetPage()">
                                 <option selected="selected" value=''>All</option>
                                 <option ng-value="0">Info</option>
                                 <option ng-value="1">Warning</option>
                                 <option ng-value="2">Critical</option>
-                                <option ng-value="3">Others</option>
+                                <option ng-value="3">Error</option>
                             </select>
                         </div>
                     </div>                                        
@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label for="selectState" class="col-sm-3 control-label">Instance</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instanceId">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instanceId" ng-change="resetPage()">
                                 <option selected="selected" value=''>All</option>
                                 <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceId}}</option>
 

@@ -11,7 +11,7 @@
 
         var filters = {
             status: '',
-            instanceId: '',
+            instanceId: ''
         };
 
         $scope.filter = angular.copy(filters);
@@ -27,6 +27,18 @@
         $scope.instanceData = instanceData;
         
         $scope.dataloading = true;
+        
+        $scope.curPage = 0;
+        $scope.pageSize = 50;
+
+        $scope.numberOfPages = function (allRecords)
+        {
+            return Math.ceil(allRecords.length / $scope.pageSize);
+        };
+        
+        $scope.resetPage = function(){
+            $scope.curPage = 0;
+        };
 
         var url = '/alerthistory';
         telemetryService. promiseGet(url).then(function (response) {

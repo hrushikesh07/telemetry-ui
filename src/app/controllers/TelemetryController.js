@@ -3,11 +3,11 @@
     angular
         .module('app')
         .controller('TelemetryController', [
-            '$scope', 'telemetryService', 'toastr', '$uibModal',
+            '$scope', 'telemetryService', '$uibModal',
             TelemetryController
         ]);
 
-    function TelemetryController($scope, telemetryService, toastr, $uibModal) {
+    function TelemetryController($scope, telemetryService, $uibModal) {
 
         var filters = {
             state: '',
@@ -23,10 +23,13 @@
 
         $scope.instances = [];
 
-        $scope.dataloading = true;
+        $scope.instanceMetrics = {};
 
-        var url = '/list_instances_running';
-        telemetryService. promiseGet(url).then(function (response) {
+        $scope.dataloading = true;
+        $scope.showInstanceMetrics = false;
+
+        var url = '/list_instances';
+        telemetryService.promiseGet(url).then(function (response) {
             $scope.instances = response.messageBody;
             $scope.dataloading = false;
         }, function () {
@@ -51,32 +54,57 @@
                 }
             });
         };
-        
+
+        $scope.showIntanceMetrics = function (instanceId, instanceName) {
+            $scope.showInstanceMetrics = !$scope.showInstanceMetrics;
+            $scope.instanceMetrics = telemetryService.getInstanceMetrics(instanceId);
+            if ($scope.instanceMetrics) {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'app/views/instanceMetrics.html',
+                    controller: 'instanceMetricsController',
+                    backdrop: 'static',
+                    keyboard: false,
+                    scope: $scope,
+                    resolve: {
+                        instanceData: function () {
+                            return {
+                                instanceId: instanceId,
+                                instanceName: instanceName,
+                                instanceMetrics: $scope.instanceMetrics
+                            };
+                        }
+                    }
+                });
+            } else {
+                alert('No metrics found');
+            }
+
+        };
+
         $scope.$on('listInstancesEvent', function (event, args) {
-            var data = args.message, existing, msg = '';
+            var data = args.message, existing;
             for (var i = 0; i < data.length; i++) {
                 existing = false;
                 for (var j = 0; j < $scope.instances.length; j++) {
                     if (data[i].instanceId === $scope.instances[j].instanceId) {
                         angular.extend($scope.instances[j], data[i]);
-                        msg = "Instance " + data[i].instanceName + "'s current state is " + data[i].state;
-                        showNotification(msg);
                         existing = true;
                         break;
                     }
                 }
-
-
                 if (!existing) {
-                    $scope.instances.push(args.message[i]);
+                    $scope.instances.push(data[i]);
                 }
             }
             $scope.$apply();
         });
 
-        function showNotification(content) {
-            //toastr.success(content);
-        }
+        $scope.$on('monitoringEvent', function (event, args) {
+            var data = args.message;
+            telemetryService.updateInstanceMetrics(data);
+            $scope.$broadcast('updateMetrics');
+        });
     }
 
 })();

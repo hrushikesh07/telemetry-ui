@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-if="!dataloading" ng-repeat="data in filtered = (alerts| filter: filter) | orderBy:'timestamp':true">
+            <tr ng-if="!dataloading" ng-repeat="data in filtered = (alerts| filter: filter) | orderBy:'timestamp':true | pagination: curPage * pageSize | limitTo: pageSize">
                 <td data-title="ID" ng-switch on="data.status" class="align-center">
                     <button type="button" ng-switch-when="0" class="btn btn-block btn-info no-pointer">Info</button>
                     <button type="button" ng-switch-when="1" class="btn btn-block btn-warning no-pointer">Warning</button>
@@ -33,4 +33,30 @@
             </tr>
         </tbody>
     </table>
+    <div ng-show="filtered.length">
+        <ul class="pagination pagination-sm no-margint">
+            <li>
+                <a ng-disabled="curPage == 0"
+                        ng-click="$parent.curPage = 0">FIRST</a>
+            </li>
+            <li>
+                <a ng-disabled="curPage == 0"
+                        ng-click="$parent.curPage = curPage - 1">PREV</a>
+            </li>
+            <li>
+                <span>Page {{curPage + 1}} of {{ numberOfPages(filtered)}}</span>
+            </li>
+            <li>
+                <a ng-disabled="curPage >= filtered.length / pageSize - 1"
+                        ng-click="$parent.curPage = curPage + 1">NEXT </a>
+                
+            </li>
+            <li>
+                <a ng-disabled="curPage >= filtered.length / pageSize - 1"
+                        ng-click="$parent.curPage = numberOfPages(filtered) -1">LAST </a>
+                
+            </li>
+        </ul>
+    </div>
+
 </div>

@@ -59,4 +59,5 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
 
         $urlRouterProvider.otherwise('/cateye');
 
-    });
+    })
+    .constant('baseAPIUrl', 'http://telemetry-api.rlcatalyst.com');
