@@ -3,11 +3,11 @@
     angular
         .module('app')
         .controller('TelemetryController', [
-            '$scope', 'telemetryService', '$uibModal',
+            '$scope', 'telemetryService', '$uibModal', 'toastr',
             TelemetryController
         ]);
 
-    function TelemetryController($scope, telemetryService, $uibModal) {
+    function TelemetryController($scope, telemetryService, $uibModal, toastr) {
 
         var filters = {
             state: '',
@@ -56,6 +56,7 @@
         };
 
         $scope.showIntanceMetrics = function (instanceId, instanceName) {
+            toastr.clear();
             $scope.showInstanceMetrics = !$scope.showInstanceMetrics;
             $scope.instanceMetrics = telemetryService.getInstanceMetrics(instanceId);
             if ($scope.instanceMetrics) {
@@ -65,6 +66,7 @@
                     controller: 'instanceMetricsController',
                     backdrop: 'static',
                     keyboard: false,
+                    size: 'lg',
                     scope: $scope,
                     resolve: {
                         instanceData: function () {
@@ -77,7 +79,9 @@
                     }
                 });
             } else {
-                alert('No metrics found');
+                toastr.warning('No metrics data available for this instance', '', {
+                    closeButton: true
+                });
             }
 
         };
@@ -100,9 +104,7 @@
             $scope.$apply();
         });
 
-        $scope.$on('monitoringEvent', function (event, args) {
-            var data = args.message;
-            telemetryService.updateInstanceMetrics(data);
+        $scope.$on('monitoringEvent', function () {
             $scope.$broadcast('updateMetrics');
         });
     }

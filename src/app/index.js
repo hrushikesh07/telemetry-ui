@@ -60,4 +60,6 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
         $urlRouterProvider.otherwise('/cateye');
 
     })
-    .constant('baseAPIUrl', 'http://telemetry-api.rlcatalyst.com');
+    .constant('baseAPIUrl', 'http://telemetry-api.rlcatalyst.com')
+    .constant('alertLimit', 500)
+    .constant('pageSize', 15);

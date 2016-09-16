@@ -3,11 +3,11 @@
     angular
         .module('app')
         .controller('AdverseEventsController', [
-            '$scope', 'telemetryService', 'toastr',
+            '$scope', 'telemetryService', 'toastr', 'pageSize', 'alertLimit',
             AdverseEventsController
         ]);
 
-    function AdverseEventsController($scope, telemetryService, toastr) {
+    function AdverseEventsController($scope, telemetryService, toastr, pageSize, alertLimit) {
 
         var filters = {
             status: '',
@@ -19,27 +19,26 @@
         $scope.resetFilter = function () {
             $scope.filter = angular.copy(filters);
         };
-        
+
         $scope.instanceFilter = true;
 
         $scope.alerts = [];
 
         $scope.curPage = 0;
-        $scope.pageSize = 50;
+        $scope.pageSize = pageSize;
 
         $scope.numberOfPages = function (allRecords)
         {
             return Math.ceil(allRecords.length / $scope.pageSize);
         };
-        
-        $scope.resetPage = function(){
+
+        $scope.resetPage = function () {
             $scope.curPage = 0;
         };
 
         var urList = '/list_instances_running';
         telemetryService.promiseGet(urList).then(function (response) {
             $scope.instances = response.messageBody;
-            $scope.dataloading = false;
         }, function () {
         });
         $scope.getElkLink = function (alertData) {
@@ -73,6 +72,9 @@
                     data.status = 3;
                 }
                 $scope.alerts.push(data);
+                if($scope.alerts.length>alertLimit){
+                    $scope.alerts = $scope.alerts.slice(-alertLimit);
+                }
             }
 
         });

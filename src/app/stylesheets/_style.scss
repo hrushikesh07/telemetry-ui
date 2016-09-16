@@ -35,8 +35,9 @@ body {
 
 .heading-title{
     margin: 0 0 10px 0;
-    border-bottom: 1px dashed #ccc;
     padding-bottom: 5px;
+    font-size: 17px;
+    color: #3C8DBC;
 }
 
 a{
@@ -78,6 +79,14 @@ a{
     color: #605ca8;
 }
 
+.instance-metrics{
+    font-size: 16px;
+    .metrics-align{
+        margin-bottom: 10px;
+        padding: 0 5px;
+    }
+}
+
 .font-20{
     font-size: 20px;
 }
@@ -101,6 +110,17 @@ a{
 }
 
  a[disabled] {pointer-events: none;}
+ 
+ .pagination{
+     li{
+         a{
+             &[disabled]{
+                 color: #ccc;
+                 background: #eee;
+             }
+         }
+     }
+ }
 
 .no-pointer{
     cursor: default;

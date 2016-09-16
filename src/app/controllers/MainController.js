@@ -37,7 +37,8 @@
                     $scope.$broadcast('listInstancesEvent', {message: parsedJson.messageBody});
                     break;
                 case "monitoring":
-                    $scope.$broadcast('monitoringEvent', {message: parsedJson.messageBody});
+                    telemetryService.updateInstanceMetrics(parsedJson.messageBody);
+                    $scope.$broadcast('monitoringEvent');
                     break;
                 case "alert":
                     if (parsedJson.messageBody.status && parsedJson.messageBody.status === 2) {
@@ -83,7 +84,8 @@
         var url = '/accounts';
         telemetryService.promiseGet(url).then(function (response) {
             vm.accounts = response.messageBody;
-            vm.selectedAccount = vm.accounts[0].accountName;
+//            vm.selectedAccount = vm.accounts[0].accountName;
+            vm.selectedAccount = '';
         }, function () {
 
         });

@@ -3,11 +3,11 @@
     angular
         .module('app')
         .controller('instanceAdverseController', [
-            '$scope', 'telemetryService', 'instanceData', '$uibModalInstance',
+            '$scope', 'telemetryService', 'instanceData', '$uibModalInstance', 'pageSize',
             instanceAdverseController
         ]);
 
-    function instanceAdverseController($scope, telemetryService, instanceData, $uibModalInstance) {
+    function instanceAdverseController($scope, telemetryService, instanceData, $uibModalInstance, pageSize) {
 
         var filters = {
             status: '',
@@ -29,7 +29,7 @@
         $scope.dataloading = true;
         
         $scope.curPage = 0;
-        $scope.pageSize = 50;
+        $scope.pageSize = pageSize;
 
         $scope.numberOfPages = function (allRecords)
         {
