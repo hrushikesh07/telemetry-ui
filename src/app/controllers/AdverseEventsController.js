@@ -75,6 +75,7 @@
                 if($scope.alerts.length>alertLimit){
                     $scope.alerts = $scope.alerts.slice(-alertLimit);
                 }
+                $scope.$apply();
             }
 
         });
