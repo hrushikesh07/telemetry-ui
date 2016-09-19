@@ -36,7 +36,7 @@
             $scope.curPage = 0;
         };
 
-        var urList = '/list_instances_running';
+        var urList = '/list_instances';
         telemetryService.promiseGet(urList).then(function (response) {
             $scope.instances = response.messageBody;
         }, function () {
@@ -78,6 +78,24 @@
                 $scope.$apply();
             }
 
+        });
+        
+        $scope.$on('listInstancesEvent', function (event, args) {
+            var data = args.message, existing;
+            for (var i = 0; i < data.length; i++) {
+                existing = false;
+                for (var j = 0; j < $scope.instances.length; j++) {
+                    if (data[i].instanceId === $scope.instances[j].instanceId) {
+                        angular.extend($scope.instances[j], data[i]);
+                        existing = true;
+                        break;
+                    }
+                }
+                if (!existing) {
+                    $scope.instances.push(data[i]);
+                }
+            }
+            $scope.$apply();
         });
     }
 

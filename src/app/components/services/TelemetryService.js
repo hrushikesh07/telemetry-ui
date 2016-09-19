@@ -41,18 +41,19 @@
             updateInstanceMetrics: function (data) {
                 var instanceId = data.instanceId;
                 var checkName = data.checkName;
+                var computeChecks = ['cpu', 'disk', 'memory', 'network'];
                 if (!instanceMetrics[instanceId]) {
                     instanceMetrics[instanceId] = {
                         'app': {},
                         'compute': {}
                     };
-                    if (checkName === 'cpu' || checkName === 'disk' || checkName === 'memory' || checkName === 'network') {
+                    if (computeChecks.indexOf(checkName) !== -1) {
                         instanceMetrics[instanceId]['compute'][checkName] = data;
                     } else {
                         instanceMetrics[instanceId]['app'][checkName] = data;
                     }
                 } else {
-                    if (checkName === 'cpu' || checkName === 'disk' || checkName === 'memory' || checkName === 'network') {
+                    if (computeChecks.indexOf(checkName) !== -1) {
                         instanceMetrics[instanceId]['compute'][checkName] = data;
                     } else {
                         instanceMetrics[instanceId]['app'][checkName] = data;
