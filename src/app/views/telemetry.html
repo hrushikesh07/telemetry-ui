@@ -79,7 +79,7 @@
             <tbody>
                 <tr ng-if="!dataloading" ng-repeat="data in filtered = (instances | filter: filter) | orderBy:'$index':true">
                     <td data-title="Status">
-                        <span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped', 'txt-red': data.state == 'terminated'}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
+                        <span ng-class="{'txt-green': data.state == 'running', 'txt-red': data.state == 'stopped', 'txt-red': data.state == 'terminated'}" uib-tooltip="{{data.state}}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
                     </td>
                     <td data-title="Events"><span class="txt-blue"><i class="fa fa-fw fa-info-circle cursor-pointer fa-2x" ng-click="showIntanceAdverse(data.instanceId, data.instanceName);"></i></span</td>
                     <!--<td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>-->
@@ -90,7 +90,7 @@
                     <td data-title="IP Address">{{data.publicIp}}<br />
                         {{data.privateIp}}</td>
                     <td data-title="UpTime">{{data.uptime}}</td>
-                    <td data-title="UpTime"><span class="cursor-pointer" ng-click="showIntanceMetrics(data.instanceId, data.instanceName);">Metrics</span></td>
+                    <td data-title="UpTime"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data.instanceId, data.instanceName);">Metrics</span></td>
                 </tr>
                 <tr ng-if="!dataloading && filtered.length === 0">
                     <td colspan="8" class="txt-red">

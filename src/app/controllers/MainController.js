@@ -42,20 +42,9 @@
                     break;
                 case "alert":
                     if (parsedJson.messageBody.status && parsedJson.messageBody.status === 2) {
-                        if (parsedJson.messageBody.status === 1) {
-                            toastr.warning(parsedJson.messageBody.reason, 'Warning', {
-                                closeButton: true
-                            });
-                        } else if (parsedJson.messageBody.status === 2) {
-                            toastr.error(parsedJson.messageBody.reason, 'Critical', {
-                                closeButton: true
-                            });
-                        } else {
-                            toastr.error(parsedJson.messageBody.reason, 'Error', {
-                                closeButton: true
-                            });
-                        }
-
+                        toastr.error(parsedJson.messageBody.reason, 'Critical', {
+                            closeButton: true
+                        });
                     }
                     $scope.$broadcast('alertEvent', {message: parsedJson.messageBody});
 
@@ -89,7 +78,5 @@
         }, function () {
 
         });
-
-
     }
 })();
