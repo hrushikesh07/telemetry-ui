@@ -10,9 +10,7 @@
     function TelemetryController($scope, telemetryService, $uibModal, toastr) {
 
         var filters = {
-            state: '',
-            monitoring: '',
-            remediation: ''
+            state: ''
         };
 
         $scope.filter = angular.copy(filters);
