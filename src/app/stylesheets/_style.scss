@@ -112,6 +112,7 @@ a{
  a[disabled] {pointer-events: none;}
  
  .pagination{
+     margin: 0;
      li{
          a{
              &[disabled]{

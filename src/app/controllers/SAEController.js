@@ -3,93 +3,105 @@
     angular
         .module('app', ['nvd3'])
         .controller('SAEController', [
-            SAEController
+            '$scope', '$stateParams', 'telemetryService', 'commonService', 'pageSize', SAEController
         ]);
+    function SAEController($scope, $stateParams, telemetryService, commonService, pageSize) {
 
-    function SAEController() {
-        var vm = this;
-        
-        var remediationData = [
-            {
-                key: "Cumulative Return",
-                values: [
-                    {
-                        "label": "A",
-                        "value": 29.765957771107
-                    },
-                    {
-                        "label": "B",
-                        "value": 0
-                    },
-                    {
-                        "label": "C",
-                        "value": 32.807804682612
-                    },
-                    {
-                        "label": "D",
-                        "value": 196.45946739256
-                    },
-                    {
-                        "label": "E",
-                        "value": 0.19434030906893
-                    },
-                    {
-                        "label": "F",
-                        "value": 98.079782601442
-                    },
-                    {
-                        "label": "G",
-                        "value": 13.925743130903
-                    },
-                    {
-                        "label": "H",
-                        "value": 5.1387322875705
-                    }
-                ]
-            }
-        ];
-        
+        $scope.instanceId = $stateParams.instanceId;
+        $scope.alerts = [];
+        $scope.remediationData = [];
+        $scope.alertColumns = {};
+        $scope.remediationColumns = {};
+        $scope.alertPage = 1;
+        $scope.remediationPage = 1;
+        $scope.pageSize = pageSize;
         var eventsData = [
             {
                 key: "Cumulative Return",
-                values: [
-                    {
-                        "label": "A",
-                        "value": 19.765957771107
-                    },
-                    {
-                        "label": "B",
-                        "value": 10
-                    },
-                    {
-                        "label": "C",
-                        "value": 22.807804682612
-                    },
-                    {
-                        "label": "D",
-                        "value": 96.45946739256
-                    },
-                    {
-                        "label": "E",
-                        "value": 30.19434030906893
-                    },
-                    {
-                        "label": "F",
-                        "value": 78.079782601442
-                    },
-                    {
-                        "label": "G",
-                        "value": 73.925743130903
-                    },
-                    {
-                        "label": "H",
-                        "value": 45.1387322875705
-                    }
-                ]
+                values: []
             }
         ];
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var fromTime = firstDay.toISOString();
+        var toTime = date.toISOString();
+        var url = '/analytics/alert/aggregate?status=2&instance=' + $scope.instanceId + '&frequency=1_HOUR&fromTime=' + fromTime + '&toTime=' + toTime;
+        telemetryService.promiseGet(url).then(function (response) {
 
-        vm.options = {
+            var data;
+            if (response.results[0].series) {
+                data = response.results[0].series[0];
+                $scope.alertColumns = commonService.toObject(data.columns);
+                data.values = data.values.slice(0, 20);
+                eventsData[0].values = data.values;
+                $scope.data = eventsData;
+                $scope.dataloading = false;
+            } else {
+                $scope.dataloading = false;
+            }
+
+        }, function () {
+
+        });
+        $scope.getAlertHistory = function () {
+            $scope.alerts = [];
+            var offset = ($scope.alertPage - 1) * pageSize;
+            var url = '/alerthistory?instance=' + $scope.instanceId+'&orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+            telemetryService.promiseGet(url).then(function (response) {
+
+                var data;
+                if (response.results[0].series) {
+                    data = response.results[0].series[0];
+                    $scope.alertColumns = commonService.toObject(data.columns);
+                    angular.forEach(data.values, function (value) {
+                        if (value[$scope.alertColumns.status] > 2) {
+                            value[$scope.alertColumns.status] = 3;
+                        }
+                        $scope.alerts.push(value);
+                    });
+                    $scope.dataloading = false;
+                } else {
+                    $scope.dataloading = false;
+                }
+
+            }, function () {
+
+            });
+        };
+
+        $scope.getRemediationData = function () {
+            $scope.remediationData = [];
+            var offset = ($scope.remediationPage - 1) * pageSize;
+            var url = '/remediation_history?instance=' + $scope.instanceId+'&orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+            telemetryService.promiseGet(url).then(function (response) {
+
+                var data;
+                if (response.results[0].series) {
+                    data = response.results[0].series[0];
+                    $scope.remediationColumns = commonService.toObject(data.columns);
+                    $scope.remediationData = data.values;
+
+                    $scope.dataloading = false;
+                } else {
+                    $scope.dataloading = false;
+                }
+
+            }, function () {
+
+            });
+        };
+        
+        $scope.getAlertPaginationRecord = function(page){
+            $scope.alertPage = page;
+            $scope.getAlertHistory();
+        };
+        
+        $scope.getRemediationPaginationRecord = function(page){
+            $scope.remediationPage = page;
+            $scope.getRemediationData();
+        };
+
+        $scope.options = {
             chart: {
                 type: 'discreteBarChart',
                 height: 300,
@@ -100,15 +112,14 @@
                     left: 55
                 },
                 x: function (d) {
-                    return d.label;
+                    var date = new Date(d[$scope.alertColumns.time]);
+//                    return d3.time.format("%d %b")(date);
+                    return d3.time.format("%H:%M")(date);
                 },
                 y: function (d) {
-                    return d.value + (1e-10);
+                    return d[$scope.alertColumns.value];
                 },
                 showValues: true,
-                valueFormat: function (d) {
-                    return d3.format(',.4f')(d);
-                },
                 duration: 500,
                 xAxis: {
                     axisLabel: 'Date'
@@ -120,21 +131,17 @@
             }
         };
         console.log();
-
-        vm.changeGraph = function(type){
-            if(type === 'remediation'){
-                vm.data = remediationData;
-                vm.graphTitle = 'Remediation Data';
-                vm.options.chart.yAxis.axisLabel = 'Remediation';
-            }else if(type === 'events'){
-                vm.data = eventsData;
-                vm.graphTitle = 'Events Data';
-                vm.options.chart.yAxis.axisLabel = 'Events';
+        $scope.changeGraph = function (type) {
+            if (type === 'events') {
+                $scope.data = eventsData;
+                $scope.graphTitle = 'Events Data';
+                $scope.options.chart.yAxis.axisLabel = 'Events';
             }
         };
-        
-        function init(){
-            vm.changeGraph('remediation');
+        function init() {
+            $scope.changeGraph('events');
+            $scope.getAlertHistory();
+            $scope.getRemediationData();
         }
         init();
     }

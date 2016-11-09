@@ -3,48 +3,52 @@
     angular
         .module('app')
         .controller('RemediationController', [
-            '$scope', 'telemetryService', 'toastr',
-            RemediationController
+            '$scope', 'telemetryService', 'pageSize', 'commonService',
+                RemediationController
         ]);
 
-    function RemediationController($scope, telemetryService,toastr) {
-        
-        $scope.remediationData = [];
-        
-        $scope.dataloading = true;
+    function RemediationController($scope, telemetryService, pageSize, commonService) {
 
-        telemetryService.getRemediationHistory().then(function (response) {
-            $scope.remediationData = response.data.messageBody;
-            $scope.dataloading = false;
-        }, function () {
+        $scope.remediationData = [];        
 
-        });
-//        $scope.$on('listInstancesEvent', function (event, args) {
-//            var data = args.message, existing, msg = '';
-//            for (var i = 0; i < data.length; i++) {
-//                existing = false;
-//                for (var j = 0; j < $scope.remediationData.length; j++) {
-//                    if (data[i].instanceId === $scope.remediationData[j].instanceId) {
-//
-//                        $scope.remediationData[j] = data[i];
-//                        msg = "Instance "+data[i].instanceName+"'s current state is "+data[i].state;
-//                        showNotification(msg);
-//                        existing = true;
-//                        break;
-//                    }
-//                }
-//
-//
-//                if (!existing) {
-//                    $scope.remediationData.push(args.message[i]);
-//                }
-//            }
-//            $scope.$apply();
-//        });
+        $scope.remediationPage = 1;
+
+        $scope.remediationColumns = {};
         
-        function showNotification(content){
-           toastr.success(content);
+        $scope.pageSize = pageSize;
+
+        $scope.getRemediationData = function () {
+            $scope.dataloading = true;
+            var offset = ($scope.remediationPage - 1) * pageSize;
+            var url = '/remediation_history?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+            telemetryService.promiseGet(url).then(function (response) {
+
+                var data;
+                if (response.results[0].series) {
+                    data = response.results[0].series[0];
+                    $scope.remediationColumns = commonService.toObject(data.columns);
+                    $scope.remediationData = data.values;
+
+                    $scope.dataloading = false;
+                } else {
+                    $scope.dataloading = false;
+                }
+
+            }, function () {
+
+            });
+        };
+        
+        $scope.getRemediationPaginationRecord = function(page){
+            $scope.remediationPage = page;
+            $scope.getRemediationData();
+        };        
+
+        function init() {
+            $scope.getRemediationData();
         }
+        ;
+        init();
     }
 
 })();

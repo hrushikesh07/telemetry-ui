@@ -61,5 +61,5 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
 
     })
     .constant('baseAPIUrl', 'http://telemetry-api.rlcatalyst.com')
-    .constant('alertLimit', 500)
-    .constant('pageSize', 15);
+//    .constant('baseAPIUrl', 'http://192.168.152.170:8080')
+    .constant('pageSize', 10);

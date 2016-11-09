@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status" ng-change="resetPage()">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status" ng-change="getAlertHistory()">
                                 <option selected="selected" value=''>All</option>
                                 <option ng-value="0">Info</option>
                                 <option ng-value="1">Warning</option>
@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label for="selectState" class="col-sm-3 control-label">Instance</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instanceId" ng-change="resetPage()">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instance" ng-change="getAlertHistory()">
                                 <option selected="selected" value=''>All</option>
                                 <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceId}}</option>
 

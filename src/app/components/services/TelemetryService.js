@@ -27,10 +27,6 @@
                     });
                 return deferred.promise;
             },
-            getRemediationHistory: function () {
-                var url = '/remediation_history';
-                return $http.get(fullUrl(url));
-            },
             getInstanceMetrics: function (instanceId) {
                 if (instanceMetrics[instanceId]) {
                     return instanceMetrics[instanceId];
@@ -41,7 +37,7 @@
             updateInstanceMetrics: function (data) {
                 var instanceId = data.instanceId;
                 var checkName = data.checkName;
-                var computeChecks = ['cpu', 'disk', 'memory', 'network', 'check_memory_usage','cpu_usages_check', 'memory_metrics', 'memory_usage_check', 'disk_usage_check', 'keepalive', 'load-metrics', 'disk-capacity-metrics'];
+                var computeChecks = ['cpu', 'disk', 'memory', 'network', 'check_memory_usage', 'cpu_usages_check', 'memory_metrics', 'memory_usage_check', 'disk_usage_check', 'keepalive', 'load-metrics', 'disk-capacity-metrics'];
                 if (!instanceMetrics[instanceId]) {
                     instanceMetrics[instanceId] = {
                         'app': {},

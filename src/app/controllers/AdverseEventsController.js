@@ -3,33 +3,35 @@
     angular
         .module('app')
         .controller('AdverseEventsController', [
-            '$scope', 'telemetryService', 'toastr', 'pageSize', 'alertLimit',
+            '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService',
             AdverseEventsController
         ]);
 
-    function AdverseEventsController($scope, telemetryService, toastr, pageSize, alertLimit) {
+    function AdverseEventsController($scope, telemetryService, toastr, pageSize, commonService) {
 
         var filters = {
             status: '',
-            instanceId: ''
+            instance: ''
         };
 
         $scope.filter = angular.copy(filters);
 
         $scope.resetFilter = function () {
             $scope.filter = angular.copy(filters);
+            $scope.getAlertHistory();
         };
 
         $scope.instanceFilter = true;
 
         $scope.alerts = [];
+        $scope.alertColumns = {};
 
-        $scope.curPage = 0;
+        $scope.alertPage = 1;
         $scope.pageSize = pageSize;
 
         $scope.numberOfPages = function (allRecords)
         {
-            return Math.ceil(allRecords.length / $scope.pageSize);
+            return Math.ceil(allRecords.length / $scope.alertPageSize);
         };
 
         $scope.resetPage = function () {
@@ -42,44 +44,85 @@
         }, function () {
         });
         $scope.getElkLink = function (alertData) {
-            var timeStamp = new Date(alertData.timestamp * 1000);
+            var time = alertData[$scope.alertColumns.time];
+            var instanceid = alertData[$scope.alertColumns.instanceId];
+            var timeStamp = new Date(time);
             var timeStampIso = timeStamp.toISOString();
-            var timeStampMinus = new Date((alertData.timestamp * 1000) - (5 * 60 * 1000));
+            var timeStampMinus = new Date(timeStamp.getTime() - (5 * 60 * 1000));
             var timeStampMinusIso = timeStampMinus.toISOString();
-            var elkLink = "http://elk.rlcatalyst.com/search/" + alertData.instanceId + "/" + timeStampMinusIso + "/" + timeStampIso;
+            var elkLink = "http://elk.rlcatalyst.com/search/" + instanceid + "/" + timeStampMinusIso + "/" + timeStampIso;
             return encodeURI(elkLink);
         };
-        $scope.dataloading = true;
-        var url = '/alerthistory';
-        telemetryService.promiseGet(url).then(function (response) {
-            angular.forEach(response.messageBody, function (value, key) {
-                if (value.status > 2) {
-                    value.status = 3;
+
+        $scope.getAlertHistory = function () {
+            $scope.dataloading = true;
+            $scope.alerts = [];
+            var offset = ($scope.alertPage - 1) * pageSize;
+            var url = '/alerthistory?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+            if ($scope.filter.status && $scope.filter.status !== '') {
+                url += '&status=' + $scope.filter.status;
+            }
+            if ($scope.filter.instance && $scope.filter.instance !== '') {
+                url += '&instance=' + $scope.filter.instance;
+            }
+            telemetryService.promiseGet(url).then(function (response) {
+
+                var data;
+                if (response.results[0].series) {
+                    data = response.results[0].series[0];
+                    $scope.alertColumns = commonService.toObject(data.columns);
+                    angular.forEach(data.values, function (value) {
+                        if (value[$scope.alertColumns.status] > 2) {
+                            value[$scope.alertColumns.status] = 3;
+                        }
+                        $scope.alerts.push(value);
+                    });
+
+                    $scope.dataloading = false;
+                } else {
+                    $scope.dataloading = false;
                 }
-                $scope.alerts.push(value);
+
+            }, function () {
+
             });
+        };
+        
+        $scope.getAlertPaginationRecord = function(page){
+            $scope.alertPage = page;
+            $scope.getAlertHistory();
+        };
 
-            $scope.dataloading = false;
-
-        }, function () {
-
-        });
         $scope.$on('alertEvent', function (event, args) {
             var data = args.message;
-            console.log(data);
-            if (data) {
-                if (data.status > 2) {
-                    data.status = 3;
+            data = Object.values(data);
+            if (data && $scope.alertPage === 1) {
+                var filterCheck = true;
+                data[$scope.alertColumns.time] = data[$scope.alertColumns.time] * 1000;
+                if (data[$scope.alertColumns.status] > 2) {
+                    data[$scope.alertColumns.status] = 3;
                 }
-                $scope.alerts.push(data);
-                if($scope.alerts.length>alertLimit){
-                    $scope.alerts = $scope.alerts.slice(-alertLimit);
+                if ($scope.filter.status && $scope.filter.status !== '') {
+                    if (data[$scope.alertColumns.status] !== $scope.filter.status) {
+                        filterCheck = false;
+                    }
                 }
-                $scope.$apply();
+                if ($scope.filter.instance && $scope.filter.instance !== '') {
+                    if (data[$scope.alertColumns.instance] !== $scope.filter.instance) {
+                        filterCheck = false;
+                    }
+                }
+                if (filterCheck) {
+                    $scope.alerts.push(data);
+                    if ($scope.alerts.length > pageSize) {
+                        $scope.alerts = $scope.alerts.slice(-pageSize);
+                    }
+                    $scope.$apply();
+                }
             }
 
         });
-        
+
         $scope.$on('listInstancesEvent', function (event, args) {
             var data = args.message, existing;
             for (var i = 0; i < data.length; i++) {
@@ -97,6 +140,11 @@
             }
             $scope.$apply();
         });
+
+        function init() {
+            $scope.getAlertHistory();
+        }
+        init();
     }
 
 })();

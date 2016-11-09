@@ -14,16 +14,13 @@
                 <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
 
-                    <h3 class="box-title">{{vm.graphTitle}}</h3>
+                    <h3 class="box-title">{{graphTitle}}</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" ng-click="vm.changeGraph('remediation')" class="btn btn-box-tool"><i class="fa fa-shield"></i>
-                        </button>
-                        <button type="button" ng-click="vm.changeGraph('events')" class="btn btn-box-tool"><i class="fa fa-bell"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
                     <div id="interactive" style="height: 300px;">
-                        <nvd3 options="vm.options" data="vm.data"></nvd3>
+                        <nvd3 options="options" data="data"></nvd3>
                     </div>
                 </div>
                 <!-- /.box-body-->
@@ -35,32 +32,10 @@
     </div>
     <!-- /.row -->
 
+
     <div class="row">
+
         <div class="col-md-12">
-            <!-- Bar chart -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-shield"></i>
-
-                    <h3 class="box-title">Remediation Logs</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div id="bar-chart" style="height: 300px;"></div>
-                </div>
-                <!-- /.box-body-->
-            </div>
-            <!-- /.box -->
-        </div>
-    </div>
-    <div class="row">
-
-        <div class="col-md-6">
             <!-- Line chart -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -69,9 +44,7 @@
                     <h3 class="box-title">Adverse Events</h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
                     </div>
                 </div>
                 <div class="box-body">
@@ -81,23 +54,23 @@
             </div>
             <!-- /.box -->
         </div>
-        <div class="col-md-6">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
 
             <!-- Area chart -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
 
-                    <h3 class="box-title">Chef Action History</h3>
+                    <h3 class="box-title">Remediation Logs</h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
                     </div>
                 </div>
                 <div class="box-body">
-                    <div id="area-chart" style="height: 338px;" class="full-width-chart"></div>
+                    <div ng-include="'app/views/remediationlisting.html'"></div>
                 </div>
                 <!-- /.box-body-->
             </div>
