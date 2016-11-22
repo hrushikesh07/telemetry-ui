@@ -18,24 +18,17 @@
         $scope.pageSize = pageSize;
 
         $scope.getRemediationData = function () {
-            $scope.dataloading = true;
+            $scope.remediationData = [];
+            $scope.remediationLoading = true;
             var offset = ($scope.remediationPage - 1) * pageSize;
-            var url = '/remediation_history?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
-            telemetryService.promiseGet(url).then(function (response) {
+            telemetryService.getRemediationData(offset, pageSize).then(function (response) {
 
-                var data;
-                if (response.results[0].series) {
-                    data = response.results[0].series[0];
-                    $scope.remediationColumns = commonService.toObject(data.columns);
-                    $scope.remediationData = data.values;
-
-                    $scope.dataloading = false;
-                } else {
-                    $scope.dataloading = false;
-                }
+                $scope.remediationData = response.remediationData;
+                $scope.remediationColumns = response.remediationColumns;
+                $scope.remediationLoading = false;
 
             }, function () {
-
+                $scope.remediationLoading = false;
             });
         };
         

@@ -3,11 +3,11 @@
 
     angular.module('app')
         .service('telemetryService', [
-            '$q', '$http', 'baseAPIUrl',
+            '$q', '$http', 'baseAPIUrl', 'commonService',
             telemetryService
         ]);
 
-    function telemetryService($q, $http, baseAPIUrl) {
+    function telemetryService($q, $http, baseAPIUrl, commonService) {
 
         function fullUrl(relUrl) {
             return baseAPIUrl + relUrl;
@@ -33,6 +33,79 @@
                 } else {
                     return false;
                 }
+            },
+            getAlertHistoryData: function (offset, pageSize, filter, timeFilter) {
+                var url = '/alerthistory?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+                if (filter.status && filter.status !== '') {
+                    url += '&status=' + filter.status;
+                }
+                if (filter.instance && filter.instance !== '') {
+                    url += '&instance=' + filter.instance;
+                }
+                if (timeFilter && timeFilter.startTime && filter.startTime !== '') {
+                    url += '&fromTime=' + commonService.toISOStringFormat(timeFilter.startTime);
+                }
+                if (timeFilter && timeFilter.endTime && filter.endTime !== '') {
+                    url += '&toTime=' + commonService.toISOStringFormat(timeFilter.endTime);
+                }
+
+                var deferred = $q.defer();
+                $http.get(fullUrl(url))
+                    .success(function (response) {
+                        var data, alertColumns = {}, alerts = [], result = {};
+                        if (response.results[0].series) {
+                            data = response.results[0].series[0];
+                            alertColumns = commonService.toObject(data.columns);
+                            angular.forEach(data.values, function (value) {
+                                if (value[alertColumns.status] > 2) {
+                                    value[alertColumns.status] = 3;
+                                }
+                                alerts.push(value);
+                            });
+                        }
+                        result = {
+                            alerts: alerts,
+                            alertColumns: alertColumns
+                        };
+                        deferred.resolve(result);
+                    })
+                    .error(function (data, status) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            },
+            getRemediationData: function (offset, pageSize, filter, timeFilter) {
+                var url = '/remediation_history?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
+                if (filter && filter.instance && filter.instance !== '') {
+                    url += '&instance=' + filter.instance;
+                }
+                if (timeFilter && timeFilter.startTime && filter.startTime !== '') {
+                    url += '&fromTime=' + timeFilter.startTime.toISOString();
+                }
+                if (timeFilter && timeFilter.endTime && filter.endTime !== '') {
+                    url += '&toTime=' + timeFilter.endTime.toISOString();
+                }
+
+                var deferred = $q.defer();
+                $http.get(fullUrl(url))
+                    .success(function (response) {
+                        var data, remediationColumns = {}, remediationData = [], result = {};
+                        var data;
+                        if (response.results[0].series) {
+                            data = response.results[0].series[0];
+                            remediationColumns = commonService.toObject(data.columns);
+                            remediationData = data.values;
+                        }
+                        result = {
+                            remediationData: remediationData,
+                            remediationColumns: remediationColumns
+                        };
+                        deferred.resolve(result);
+                    })
+                    .error(function (data, status) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
             },
             updateInstanceMetrics: function (data) {
                 var instanceId = data.instanceId;

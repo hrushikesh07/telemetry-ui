@@ -19,11 +19,14 @@
         <!-- /.box-header -->
         <div class="box-body form-horizontal">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-5">
                     <div class="form-group">
                         <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status" ng-change="getAlertHistory()">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status" ng-change="getAlertHistory('resetPage')">
                                 <option selected="selected" value=''>All</option>
                                 <option ng-value="0">Info</option>
                                 <option ng-value="1">Warning</option>
@@ -33,22 +36,20 @@
                         </div>
                     </div>                                        
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label for="selectState" class="col-sm-3 control-label">Instance</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instance" ng-change="getAlertHistory()">
+                            <select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.instance" ng-change="getAlertHistory('resetPage')">
                                 <option selected="selected" value=''>All</option>
-                                <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceId}}</option>
+                                <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceName}} - {{instance.instanceId}}</option>
 
                             </select>
                         </div>
                     </div> 
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
+                <div class="col-md-1">
 
-                    </div> 
                 </div>
             </div>
             <!-- /.row -->

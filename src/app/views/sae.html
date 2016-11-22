@@ -1,85 +1,64 @@
 <section class="content-header">
-    <h1>
+    <h1 class="pull-left">
         SAE Dashboard
-        <small>{{main.selectedAccount}}</small>
+        <small>{{instanceId}}</small>
     </h1>
+    <small class="pull-right">
+        <div class="form-group inline-form">
+            <label>Instance: </label>
+            <select class="form-control select2" id="instanceId" ng-model="instanceId" ng-change="getInstanceData()">
+                <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceName}} - {{instance.instanceId}}</option>
+            </select>
+        </div>
+    </small>
 </section>
 
 <!-- Main content -->
 <section class="content">
+
     <div class="row">
         <div class="col-xs-12">
             <!-- interactive chart -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <i class="fa fa-bar-chart-o"></i>
+                    <i class="fa fa-calendar"></i>
 
                     <h3 class="box-title">{{graphTitle}}</h3>
                     <div class="box-tools pull-right">
+                        {{graphType}}
                     </div>
                 </div>
                 <div class="box-body">
-                    <div id="interactive" style="height: 300px;">
-                        <nvd3 options="options" data="data"></nvd3>
+                    <div id="interactive">
+                        <div>
+                            <cal-heatmap config="calConfig"></cal-heatmap>
+                        </div>
+                        <!--<nvd3 options="options" data="data"></nvd3>-->
                     </div>
                 </div>
                 <!-- /.box-body-->
             </div>
             <!-- /.box -->
-
         </div>
         <!-- /.col -->
     </div>
     <!-- /.row -->
 
-
-    <div class="row">
-
-        <div class="col-md-12">
-            <!-- Line chart -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-bell"></i>
-
-                    <h3 class="box-title">Adverse Events</h3>
-
-                    <div class="box-tools pull-right">
-
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div ng-include="'app/views/adverselisting.html'"></div>
-                </div>
-                <!-- /.box-body-->
-            </div>
-            <!-- /.box -->
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12">
-
-            <!-- Area chart -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-bar-chart-o"></i>
-
-                    <h3 class="box-title">Remediation Logs</h3>
-
-                    <div class="box-tools pull-right">
-
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div ng-include="'app/views/remediationlisting.html'"></div>
-                </div>
-                <!-- /.box-body-->
+            <div class="nav-tabs-custom">
+                <uib-tabset active="active">
+                    <uib-tab index="0" heading="Adverse Events">
+                        <div ng-include="'app/views/adverselisting.html'"></div> 
+                    </uib-tab>
+                    <uib-tab index="1" heading="Remediation Logs">
+                        <div ng-include="'app/views/remediationlisting.html'"></div>
+                    </uib-tab>
+                    <li class="pull-right right-text">
+                        <span ng-if="timeFilter.startTime"><i class="fa fa-clock-o"></i> {{timeFilter.startTime| date:'MMM d, yyyy'}} &nbsp; &nbsp; <a class="btn btn-primary btn-xs" ng-href="" ng-click="showAll();">Show All</a></span>
+                        </uib-tabset>
             </div>
-            <!-- /.box -->
-
         </div>
-        <!-- /.col -->
-
     </div>
-    <!-- /.row -->
 </section>
 <!-- /.content -->

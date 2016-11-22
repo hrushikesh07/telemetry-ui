@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
-    'ngSanitize', 'ui.router', 'ui.bootstrap', 'toastr', 'app'])
+    'ngSanitize', 'ui.router', 'ui.bootstrap', 'toastr', 'commonFilters', 'app'])
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -30,7 +30,7 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
                 }
             })
             .state('home.adverse', {
-                url: '/adverse',
+                url: '/adverse/:instanceId',
                 controller: 'AdverseEventsController',
                 controllerAs: 'vm',
                 templateUrl: 'app/views/adverseEvents.html',
@@ -60,6 +60,7 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
         $urlRouterProvider.otherwise('/cateye');
 
     })
-    .constant('baseAPIUrl', 'http://telemetry-api.rlcatalyst.com')
+    .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
 //    .constant('baseAPIUrl', 'http://192.168.152.170:8080')
-    .constant('pageSize', 10);
+    .constant('pageSize', 10)
+    .constant('saePageSize', 5);

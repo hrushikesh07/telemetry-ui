@@ -65,7 +65,6 @@
             <thead>
                 <tr>
                     <th>Status</th>
-                    <th>Events</th>
                     <th>Instance ID</th>
                     <th>Instance Name</th>
                     <th>Region</th>
@@ -80,7 +79,6 @@
                     <td data-title="Status">
                         <span ng-class="{'txt-green': data.state == 'running' || data.state == 'pending' || data.state == 'rebooting', 'txt-red': data.state == 'stopped' || data.state == 'stopping'}" uib-tooltip="{{data.state}}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
                     </td>
-                    <td data-title="Events"><span class="txt-blue"><i class="fa fa-fw fa-info-circle cursor-pointer fa-2x" ng-click="showIntanceAdverse(data.instanceId, data.instanceName);"></i></span</td>
                     <td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>
                     <!--<td data-title="Instance ID">{{data.instanceId}}</td>-->
                     <td data-title="Instance Name">{{data.instanceName}}</td>

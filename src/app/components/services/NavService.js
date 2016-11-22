@@ -32,6 +32,12 @@
             type: 'link',
             state: 'home.remediation',
             icon: 'fa fa-fw fa-shield'
+          },
+          {
+            name: 'SAE',
+            type: 'link',
+            state: 'home.sae',
+            icon: 'fa fa-fw fa-area-chart'
           }
     ];
 

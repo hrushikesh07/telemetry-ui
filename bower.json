@@ -16,7 +16,8 @@
     "bootstrap": "^3.3.6",
     "angular-bootstrap": "^2.0.0",
     "angular-toastr": "^1.7.0",
-    "angular-nvd3": "^1.0.8"
+    "angular-nvd3": "^1.0.8",
+    "cal-heatmap": "^3.6.2"
   },
   "overrides": {
     "bootstrap": {

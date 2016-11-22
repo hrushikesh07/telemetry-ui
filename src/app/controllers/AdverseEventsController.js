@@ -3,12 +3,14 @@
     angular
         .module('app')
         .controller('AdverseEventsController', [
-            '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService',
+            '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService', '$stateParams',
             AdverseEventsController
         ]);
 
-    function AdverseEventsController($scope, telemetryService, toastr, pageSize, commonService) {
-
+    function AdverseEventsController($scope, telemetryService, toastr, pageSize, commonService, $stateParams) {
+        
+        $scope.currentView = 'adverse';
+        
         var filters = {
             status: '',
             instance: ''
@@ -16,8 +18,16 @@
 
         $scope.filter = angular.copy(filters);
 
+        if ($stateParams.instanceId) {
+            $scope.filter.instance = $stateParams.instanceId;
+        }
+
         $scope.resetFilter = function () {
             $scope.filter = angular.copy(filters);
+            $scope.alertPage = 1;
+            if ($stateParams.instanceId) {
+                $scope.filter.instance = $stateParams.instanceId;
+            }
             $scope.getAlertHistory();
         };
 
@@ -34,10 +44,6 @@
             return Math.ceil(allRecords.length / $scope.alertPageSize);
         };
 
-        $scope.resetPage = function () {
-            $scope.curPage = 0;
-        };
-
         var urList = '/list_instances';
         telemetryService.promiseGet(urList).then(function (response) {
             $scope.instances = response.messageBody;
@@ -46,49 +52,27 @@
         $scope.getElkLink = function (alertData) {
             var time = alertData[$scope.alertColumns.time];
             var instanceid = alertData[$scope.alertColumns.instanceId];
-            var timeStamp = new Date(time);
-            var timeStampIso = timeStamp.toISOString();
-            var timeStampMinus = new Date(timeStamp.getTime() - (5 * 60 * 1000));
-            var timeStampMinusIso = timeStampMinus.toISOString();
-            var elkLink = "http://elk.rlcatalyst.com/search/" + instanceid + "/" + timeStampMinusIso + "/" + timeStampIso;
-            return encodeURI(elkLink);
+            return commonService.getElkLink(time, instanceid);
         };
 
-        $scope.getAlertHistory = function () {
-            $scope.dataloading = true;
+        $scope.getAlertHistory = function (resetPage) {
+            if (resetPage) {
+                $scope.alertPage = 1;
+            }
+            $scope.alertsLoading = true;
             $scope.alerts = [];
             var offset = ($scope.alertPage - 1) * pageSize;
-            var url = '/alerthistory?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
-            if ($scope.filter.status && $scope.filter.status !== '') {
-                url += '&status=' + $scope.filter.status;
-            }
-            if ($scope.filter.instance && $scope.filter.instance !== '') {
-                url += '&instance=' + $scope.filter.instance;
-            }
-            telemetryService.promiseGet(url).then(function (response) {
+            telemetryService.getAlertHistoryData(offset, pageSize, $scope.filter).then(function (response) {
 
-                var data;
-                if (response.results[0].series) {
-                    data = response.results[0].series[0];
-                    $scope.alertColumns = commonService.toObject(data.columns);
-                    angular.forEach(data.values, function (value) {
-                        if (value[$scope.alertColumns.status] > 2) {
-                            value[$scope.alertColumns.status] = 3;
-                        }
-                        $scope.alerts.push(value);
-                    });
-
-                    $scope.dataloading = false;
-                } else {
-                    $scope.dataloading = false;
-                }
-
+                $scope.alerts = response.alerts;
+                $scope.alertColumns = response.alertColumns;
+                $scope.alertsLoading = false;
             }, function () {
-
+                $scope.alertsLoading = false;
             });
         };
-        
-        $scope.getAlertPaginationRecord = function(page){
+
+        $scope.getAlertPaginationRecord = function (page) {
             $scope.alertPage = page;
             $scope.getAlertHistory();
         };
