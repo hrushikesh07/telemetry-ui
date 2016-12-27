@@ -1,19 +1,19 @@
 (function () {
 
     angular
-        .module('app')
-        .controller('MainController', [
-            'navService', '$scope', 'telemetryService', 'toastr', 'baseAPIUrl',
-            MainController
-        ])
-        .filter('pagination', function ()
-        {
-            return function (input, start)
+            .module('app')
+            .controller('MainController', [
+                'navService', '$scope', 'telemetryService', 'toastr', 'baseAPIUrl',
+                MainController
+            ])
+            .filter('pagination', function ()
             {
-                start = +start;
-                return input.slice(start);
-            };
-        });
+                return function (input, start)
+                {
+                    start = +start;
+                    return input.slice(start);
+                };
+            });
 
     function MainController(navService, $scope, telemetryService, toastr, baseAPIUrl) {
         var vm = this;
@@ -41,7 +41,6 @@
                     $scope.$broadcast('monitoringEvent');
                     break;
                 case "alert":
-                    console.log(parsedJson.messageBody);
                     if (parsedJson.messageBody.status && parsedJson.messageBody.status === 2) {
                         toastr.error(parsedJson.messageBody.description, 'Critical', {
                             closeButton: true
@@ -51,7 +50,7 @@
 
                     break;
                 default:
-                    //console.log(parsedJson.ping)
+                //console.log(parsedJson.ping)
             }
         }
         evtSource.addEventListener('message', handleCallback, false);
@@ -67,10 +66,10 @@
         }, false);
 
         navService
-            .loadAllItems()
-            .then(function (menuItems) {
-                vm.menuItems = [].concat(menuItems);
-            });
+                .loadAllItems()
+                .then(function (menuItems) {
+                    vm.menuItems = [].concat(menuItems);
+                });
         var url = '/accounts';
         telemetryService.promiseGet(url).then(function (response) {
             vm.accounts = response.messageBody;

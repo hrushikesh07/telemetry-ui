@@ -1,4 +1,4 @@
-/*
+    /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
@@ -14,6 +14,10 @@ and open the template in the editor.
 
 html, body {
     min-height: 100%;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .layout-boxed {
@@ -49,6 +53,10 @@ a{
     overflow-y: auto;
 }
 
+.deactive{
+    opacity: .4;
+}
+
 .cursor-pointer{
     cursor: pointer;
 }
@@ -78,6 +86,9 @@ a{
 .txt-criticle{
     color: #DD4B39;
 }
+.txt-grey{
+    color: grey;
+}
 .txt-warning{
     color: #E08E0B;
 }
@@ -91,6 +102,22 @@ a{
         margin-bottom: 10px;
         padding: 0 5px;
     }
+}
+
+.btn.btn-search{
+    background-color: #005384;
+    color: #fff;
+    padding: 4px 7px;
+    border-radius: 0;
+    font-size: 15px;
+}
+
+.cal-timeStamp{
+    margin: 0 0 0 20px; color: #005384
+}
+
+.cal-navigation{
+    float:right;margin:0 20px 10px 0;
 }
 
 .font-20{
@@ -181,6 +208,66 @@ a[disabled] {pointer-events: none;}
         position: relative;
     }
     background: url('../img/boxed-bg.jpg') repeat fixed;
+}
+
+.critical-heatmap{
+    .cal-heatmap-container {
+        .q1
+        {
+            background-color: #FF8E88;
+            fill: #FF8E88;
+        }
+        .q2
+        {
+            background-color: #FE645A;
+            fill: #FE645A;
+        }
+        .q3
+        {
+            background-color: #F00C01;
+            fill: #F00C01;
+        }
+        .q4
+        {
+            background-color: #BF0A00;
+            fill: #BF0A00;
+        }
+        .q5
+        {
+            background-color: #9B0600;
+            fill: #9B0600;
+        }
+    }
+}
+
+.warning-heatmap{
+    .cal-heatmap-container {
+        .q1
+        {
+            background-color: #F0A150;
+            fill: #F0A150;
+        }
+        .q2
+        {
+            background-color: #F09537;
+            fill: #F09537;
+        }
+        .q3
+        {
+            background-color: #F48020;
+            fill: #F48020;
+        }
+        .q4
+        {
+            background-color: #F0750F;
+            fill: #F0750F;
+        }
+        .q5
+        {
+            background-color: #C76706;
+            fill: #C76706;
+        }
+    }
 }
 
 /*

@@ -1,28 +1,34 @@
 (function () {
 
     angular
-        .module('app')
-        .controller('AdverseEventsController', [
-            '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService', '$stateParams',
-            AdverseEventsController
-        ]);
+            .module('app')
+            .controller('AdverseEventsController', [
+                '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService', '$stateParams',
+                AdverseEventsController
+            ]);
 
     function AdverseEventsController($scope, telemetryService, toastr, pageSize, commonService, $stateParams) {
-        
+
         $scope.currentView = 'adverse';
-        
+
         var filters = {
             status: '',
-            instance: ''
+            significance: true,
+            instance: '',
+            checkName: ''
         };
+        $scope.corelation = false;
 
         $scope.filter = angular.copy(filters);
+        
+        $scope.selectedInstance = { value: {} }
 
         if ($stateParams.instanceId) {
             $scope.filter.instance = $stateParams.instanceId;
         }
 
         $scope.resetFilter = function () {
+            $scope.selectedInstance.value = {};
             $scope.filter = angular.copy(filters);
             $scope.alertPage = 1;
             if ($stateParams.instanceId) {
@@ -44,9 +50,9 @@
             return Math.ceil(allRecords.length / $scope.alertPageSize);
         };
 
-        var urList = '/list_instances';
+        var urList = '/instances';
         telemetryService.promiseGet(urList).then(function (response) {
-            $scope.instances = response.messageBody;
+            $scope.instances = response;
         }, function () {
         });
         $scope.getElkLink = function (alertData) {
@@ -62,8 +68,11 @@
             $scope.alertsLoading = true;
             $scope.alerts = [];
             var offset = ($scope.alertPage - 1) * pageSize;
+            if($scope.selectedInstance.value.id){
+                $scope.filter.instance = $scope.selectedInstance.value.id;
+            }
             telemetryService.getAlertHistoryData(offset, pageSize, $scope.filter).then(function (response) {
-
+                console.log(response);
                 $scope.alerts = response.alerts;
                 $scope.alertColumns = response.alertColumns;
                 $scope.alertsLoading = false;

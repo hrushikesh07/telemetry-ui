@@ -7,7 +7,7 @@
         <div class="form-group inline-form">
             <label>Instance: </label>
             <select class="form-control select2" id="instanceId" ng-model="instanceId" ng-change="getInstanceData()">
-                <option  ng-repeat="instance in instances"  value='{{instance.instanceId}}'>{{instance.instanceName}} - {{instance.instanceId}}</option>
+                <option  ng-repeat="instance in instances"  value='{{instance.id}}'>{{instance.name}} - {{instance.id}}</option>
             </select>
         </div>
     </small>
@@ -24,13 +24,25 @@
                     <i class="fa fa-calendar"></i>
 
                     <h3 class="box-title">{{graphTitle}}</h3>
+
                     <div class="box-tools pull-right">
-                        {{graphType}}
+
+                        <label>{{graphType}}: </label>
+                        <span ng-click="changeHeatmapEventsType(1)" class="cursor-pointer txt-warning" uib-tooltip="Warning" ng-class="{'deactive':heatmapEventsType === 2}">
+                            <i class="fa fa-fw fa-square"></i> Warning
+                        </span>&nbsp;&nbsp; |&nbsp;&nbsp;
+                        <span ng-click="changeHeatmapEventsType(2)" class="cursor-pointer txt-criticle" uib-tooltip="Warning"  ng-class="{'deactive':heatmapEventsType === 1}">
+                            <i class="fa fa-fw fa-square"></i> Critical</span> 
                     </div>
                 </div>
                 <div class="box-body">
                     <div id="interactive">
-                        <div>
+                        <div ng-class="{'critical-heatmap': heatmapEventsType == 2, 'warning-heatmap': heatmapEventsType == 1}">
+                            <span class="cal-timeStamp">{{fromDate | date : 'MMM yyyy'}} - {{toDate | date : 'MMM yyyy'}}</span>
+                            <div class="cal-navigation">
+                                <button class="btn btn-xs" id="previousSelector-a-previous" ng-disabled='disablePre' ng-click="calNavigation('pre');">Previous</button>
+                                <button class="btn btn-xs" id="previousSelector-a-next" ng-disabled='disableNext' ng-click="calNavigation('next');">Next</button>
+                            </div>
                             <cal-heatmap config="calConfig"></cal-heatmap>
                         </div>
                         <!--<nvd3 options="options" data="data"></nvd3>-->
@@ -46,17 +58,22 @@
 
     <div class="row">
         <div class="col-md-12">
+            <div class="pull-right right-text"><span ng-if="timeFilter.startTime"><i class="fa fa-clock-o"></i> {{timeFilter.startTime| date:'MMM d, yyyy'}} &nbsp; &nbsp; <a class="btn btn-primary btn-xs" ng-href="" ng-click="showAll();">Show All</a></span></div>
+            <div ng-include="'app/views/adverselisting.html'"></div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="showCorelationData">
+        <div class="col-md-12">
             <div class="nav-tabs-custom">
-                <uib-tabset active="active">
-                    <uib-tab index="0" heading="Adverse Events">
-                        <div ng-include="'app/views/adverselisting.html'"></div> 
-                    </uib-tab>
+                <uib-tabset active="active">                    
+                    <uib-tab index="0" heading="Action history">
+                        <div ng-include="'app/views/actionhistory.html'"></div> 
+                    </uib-tab> 
                     <uib-tab index="1" heading="Remediation Logs">
                         <div ng-include="'app/views/remediationlisting.html'"></div>
-                    </uib-tab>
-                    <li class="pull-right right-text">
-                        <span ng-if="timeFilter.startTime"><i class="fa fa-clock-o"></i> {{timeFilter.startTime| date:'MMM d, yyyy'}} &nbsp; &nbsp; <a class="btn btn-primary btn-xs" ng-href="" ng-click="showAll();">Show All</a></span>
-                        </uib-tabset>
+                    </uib-tab>    
+                </uib-tabset>
             </div>
         </div>
     </div>

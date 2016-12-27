@@ -1,43 +1,56 @@
 (function () {
 
     angular
-        .module('app', ['nvd3', 'calHeatmap'])
-        .controller('SAEController', [
-            '$scope', '$stateParams', 'telemetryService', 'commonService', 'saePageSize', '$filter', SAEController
-        ]);
+            .module('app', ['nvd3', 'calHeatmap'])
+            .controller('SAEController', [
+                '$scope', '$stateParams', 'telemetryService', 'commonService', 'saePageSize', '$filter', SAEController
+            ]);
     function SAEController($scope, $stateParams, telemetryService, commonService, saePageSize, $filter) {
+
         $scope.currentView = 'sae';
         $scope.instanceId = $stateParams.instanceId;
+        $scope.heatmapEventsType = 2; //2: Critical, 1: Warning
         $scope.alerts = [];
         $scope.remediationData = [];
         $scope.alertColumns = {};
         $scope.aggregationColumns = {};
         $scope.remediationColumns = {};
+        $scope.actionHistoryColumns = {};
         $scope.alertPage = 1;
-        $scope.remediationPage = 1;
         $scope.pageSize = saePageSize;
         $scope.calData = {};
         $scope.timeFilter = null;
+        $scope.corelation = true;
 
         $scope.graphTitle = 'Events Data';
-        $scope.graphType = 'Monthly Critical Events';
+        $scope.graphType = 'Monthly Events';
 
 
         $scope.eventsLoading = true;
         $scope.alertsLoading = true;
         $scope.remediationLoading = true;
+        $scope.actionHistoryLoading = true;
+        $scope.showCorelationData = false;
+        $scope.disablePre = false;
+        $scope.disableNext = false;
         
-        var startDate = commonService.addMonths(new Date(), -3);
+        
+        var currentDate = new Date();
 
+        var startDate = commonService.addMonths(new Date(), -3);
+        
+        $scope.toDate = new Date(currentDate.getTime());
+        
+        $scope.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-3, 1);
+        
         $scope.getAllInstances = function () {
-            var urList = '/list_instances';
+            var urList = '/instances';
             telemetryService.promiseGet(urList).then(function (response) {
-                $scope.instances = response.messageBody;
+                $scope.instances = response;
                 if (!$scope.instanceId) {
-                    $scope.instanceId = $scope.instances[0].instanceId;
+                    $scope.instanceId = $scope.instances[0].id;
                     $scope.getEventsData();
                     $scope.getAlertHistory();
-                    $scope.getRemediationData();
                 }
             }, function () {
             });
@@ -46,38 +59,63 @@
         $scope.getInstanceData = function () {
             $scope.getEventsData();
             $scope.getAlertHistory();
-            $scope.getRemediationData();
         };
 
 
         $scope.calClickEvent = function (date, nb) {
             $scope.timeFilter = commonService.getStartEndTime(date);
-            $scope.alertPage = 1;
-            $scope.remediationPage = 1;
+            $scope.showCorelationData = false;
             $scope.getAlertHistory();
-            $scope.getRemediationData();
         };
 
-        $scope.showAll = function(){
+        $scope.changeHeatmapEventsType = function (type) {
+            $scope.heatmapEventsType = type;
+            $scope.alertPage = 1;
+            $scope.showCorelationData = false;
+            $scope.getEventsData();
+            $scope.getAlertHistory();
+        };
+
+        $scope.showAll = function () {
             $scope.timeFilter = null;
             $scope.alertPage = 1;
-            $scope.remediationPage = 1;
             $scope.getAlertHistory();
-            $scope.getRemediationData();
         };
-        
-        $scope.calConfig = {data: {}, start: startDate, domain: 'month', rowLimit: 4, range: 4, cellSize: 30, onClick: $scope.calClickEvent};
+
+
+
+        $scope.calNavigation = function (nav) {
+            if (nav === 'pre') {
+                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth()-1, 1);
+                $scope.toDate = new Date($scope.toDate.getFullYear(), $scope.toDate.getMonth(), 0);
+            } else {
+                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth()+1, 1);
+                $scope.toDate = new Date($scope.toDate.getFullYear(), $scope.toDate.getMonth()+2, 0);
+            }
+            $scope.getEventsData();
+        };
+
+
+        $scope.calConfig = {data: {}, start: startDate, domain: 'month', rowLimit: 4, range: 4, cellSize: 30, previousSelector: '#previousSelector-a-previous', nextSelector: '#previousSelector-a-next', onClick: $scope.calClickEvent};
 
 
 
         $scope.getEventsData = function () {
             $scope.eventsLoading = true;
-            $scope.calConfig.data = {}
-            var date = new Date();
-            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            var fromTime = firstDay.toISOString();
-            var toTime = date.toISOString();
-            var url = '/analytics/alert/aggregate?status=2&instance=' + $scope.instanceId + '&frequency=1_DAY&fromTime=' + fromTime + '&toTime=' + toTime;
+            $scope.calConfig.data = {};
+            
+            if($scope.toDate.getTime() >= currentDate.getTime()){
+                $scope.disableNext =  true;
+            }else{
+                 $scope.disableNext =  false;
+            }
+            console.log('fromDate--->>>>' + $scope.fromDate);
+            console.log('toDate--->>>>' + $scope.toDate);
+            
+            var fromTime = $scope.fromDate.toISOString();
+            var toTime = $scope.toDate.toISOString();
+            
+            var url = '/analytics/alert/aggregate?checkStatus=' + $scope.heatmapEventsType + '&instance=' + $scope.instanceId + '&frequency=1_DAY&fromTime=' + fromTime + '&toTime=' + toTime;
             telemetryService.promiseGet(url).then(function (response) {
 
                 var data;
@@ -115,7 +153,7 @@
             $scope.alertsLoading = true;
             var offset = ($scope.alertPage - 1) * saePageSize;
             var filter = {
-                status: 2,
+                status: $scope.heatmapEventsType,
                 instance: $scope.instanceId
             };
             telemetryService.getAlertHistoryData(offset, saePageSize, filter, $scope.timeFilter).then(function (response) {
@@ -127,21 +165,26 @@
             });
         };
 
-        $scope.getRemediationData = function () {
+        $scope.getCorelationData = function (time) {
+            var timeStamp = new Date(time);
             $scope.remediationData = [];
+            $scope.actionHistoryData = []
             $scope.remediationLoading = true;
-            var offset = ($scope.remediationPage - 1) * saePageSize;
-            var filter = {
-                instance: $scope.instanceId
-            };
-            telemetryService.getRemediationData(offset, saePageSize, filter, $scope.timeFilter).then(function (response) {
+            $scope.actionHistoryLoading = true;
+            var timeReference = timeStamp.getTime();
+            telemetryService.getCorelationData($scope.instanceId, timeReference).then(function (response) {
 
-                $scope.remediationData = response.remediationData;
-                $scope.remediationColumns = response.remediationColumns;
+                $scope.showCorelationData = true;
+                var remediation = response.remediation;
+                $scope.actionHistoryData = response.actionHistory;
+                $scope.remediationData = remediation.remediationData;
+                $scope.remediationColumns = remediation.remediationColumns;
                 $scope.remediationLoading = false;
+                $scope.actionHistoryLoading = false;
 
             }, function () {
                 $scope.remediationLoading = false;
+                $scope.actionHistoryLoading = false;
             });
         };
 
@@ -150,16 +193,11 @@
             $scope.getAlertHistory();
         };
 
-        $scope.getRemediationPaginationRecord = function (page) {
-            $scope.remediationPage = page;
-            $scope.getRemediationData();
-        };
         function init() {
             $scope.getAllInstances();
             if ($scope.instanceId) {
                 $scope.getEventsData();
                 $scope.getAlertHistory();
-                $scope.getRemediationData();
             }
         }
         init();

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
-    'ngSanitize', 'ui.router', 'ui.bootstrap', 'toastr', 'commonFilters', 'app'])
+    'ngSanitize', 'ui.router', 'ui.bootstrap', 'toastr', 'commonFilters','ui.select', 'app'])
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -60,7 +60,7 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
         $urlRouterProvider.otherwise('/cateye');
 
     })
-    .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
-//    .constant('baseAPIUrl', 'http://192.168.152.170:8080')
+//    .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
+    .constant('baseAPIUrl', 'http://192.168.152.62:8080')
     .constant('pageSize', 10)
     .constant('saePageSize', 5);

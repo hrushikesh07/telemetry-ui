@@ -14,7 +14,7 @@
         $scope.dataloading = true;
 
         $scope.$on('updateMetrics', function () {
-            $scope.instanceData.instanceMetrics = telemetryService.getInstanceMetrics(instanceData.instanceId);
+            $scope.instanceData.instanceMetrics = telemetryService.getInstanceMetrics(instanceData.instance.id);
         });
 
         $scope.close = function () {

@@ -10,7 +10,7 @@
     function TelemetryController($scope, telemetryService, $uibModal, toastr) {
 
         var filters = {
-            state: ''
+            status: ''
         };
 
         $scope.filter = angular.copy(filters);
@@ -26,37 +26,18 @@
         $scope.dataloading = true;
         $scope.showInstanceMetrics = false;
 
-        var url = '/list_instances';
+        var url = '/instances';
         telemetryService.promiseGet(url).then(function (response) {
-            $scope.instances = response.messageBody;
+            $scope.instances = response;
             $scope.dataloading = false;
         }, function () {
         });
 
 
-        $scope.showIntanceAdverse = function (instanceId, instanceName) {
-            $uibModal.open({
-                animation: true,
-                templateUrl: 'app/views/instanceAdverse.html',
-                controller: 'instanceAdverseController',
-                backdrop: 'static',
-                size: 'lg',
-                keyboard: false,
-                resolve: {
-                    instanceData: function () {
-                        return {
-                            instanceId: instanceId,
-                            instanceName: instanceName
-                        };
-                    }
-                }
-            });
-        };
-
-        $scope.showIntanceMetrics = function (instanceId, instanceName) {
+        $scope.showIntanceMetrics = function (instance) {
             toastr.clear();
             $scope.showInstanceMetrics = !$scope.showInstanceMetrics;
-            $scope.instanceMetrics = telemetryService.getInstanceMetrics(instanceId);
+            $scope.instanceMetrics = telemetryService.getInstanceMetrics(instance.id);
             if ($scope.instanceMetrics) {
                 $uibModal.open({
                     animation: true,
@@ -69,8 +50,7 @@
                     resolve: {
                         instanceData: function () {
                             return {
-                                instanceId: instanceId,
-                                instanceName: instanceName,
+                                instance: instance,
                                 instanceMetrics: $scope.instanceMetrics
                             };
                         }
@@ -89,7 +69,7 @@
             for (var i = 0; i < data.length; i++) {
                 existing = false;
                 for (var j = 0; j < $scope.instances.length; j++) {
-                    if (data[i].instanceId === $scope.instances[j].instanceId) {
+                    if (data[i].id === $scope.instances[j].id) {
                         angular.extend($scope.instances[j], data[i]);
                         existing = true;
                         break;

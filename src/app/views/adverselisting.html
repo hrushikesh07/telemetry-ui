@@ -4,13 +4,17 @@
             <tr>
                 <th>Alert Level </th>
                 <th>ELK Link</th>
+                <th>Instance</th>
+                <th>Check</th>
                 <th>Event Time</th>
                 <th>Event Description</th>
+                <th ng-if="corelation">More Details</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-if="!alertsLoading" ng-repeat="data in alerts|orderBy: alertColumns.time: true">
-                <td data-title="ID" ng-switch on="data[alertColumns.status]">
+                <td data-title="ID" ng-switch on="data[alertColumns.value]">
+                    <a ng-href="" ng-class="{'no-pointer':!corelation}" ng-click="corelation;getCorelationData(data[alertColumns.time])">
                     <span ng-switch-when="0" class="txt-aqua" uib-tooltip="Info">
                         <i class="fa fa-fw fa-square"></i></span>
                     <span ng-switch-when="1" class="txt-warning" uib-tooltip="Warning">
@@ -19,20 +23,23 @@
                         <i class="fa fa-fw fa-square"></i></span>
                    <span ng-switch-when="3" class="txt-purple" uib-tooltip="Error">
                         <i class="fa fa-fw fa-square"></i></span>
-
+                   </a>
                 </td>
                 <td data-title="ELK Link" class="blue"><span><a href="{{getElkLink(data)}}" target="_blank"><i class="fa fa-fw fa-bar-chart"></i></a></span></td>
+                <td data-title="Instance">{{data[alertColumns.instanceId]}}</td>
+                <td data-title="Check">{{data[alertColumns.checkName]}}</td>
                 <td data-title="Event Time">
                     {{data[alertColumns.time]| date:'medium'}}</td>
-                <td data-title="Event Description">{{data[alertColumns.description]}}</td>
+                <td data-title="Event Description">{{data[alertColumns.checkOutput]}}</td>
+                <td ng-if="corelation"><a ng-href="" ng-click="getCorelationData(data[alertColumns.time])">More Details</a></td>
             </tr>
             <tr ng-if="!alertsLoading && alerts.length === 0">
-                <td colspan="4" class="txt-red align-center">
+                <td colspan="{{corelation ? '6' : '5'}}" class="txt-red align-center">
                     No Data Found
                 </td>
             </tr>
             <tr ng-if="alertsLoading">
-                <td colspan="4" class="txt-theme align-center">
+                <td colspan="{{corelation ? '6' : '5'}}" class="txt-theme align-center">
                     <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> 
                 </td>
             </tr>

@@ -20,7 +20,9 @@ angular.module('calHeatmap', [])
                 domainGutter: !config ? 10 : config.domainGutter ? config.domainGutter : 10,
                 legend: !config ? [5, 10, 15, 20] : config.legend ? config.legend : [5, 10, 15, 20],
                 legendMargin:  !config ? 0 : config.legendMargin ? config.legendMargin : 0,
-                itemName: !config ? 'item' : config.itemName ? config.itemName : 'item'
+                itemName: !config ? 'item' : config.itemName ? config.itemName : 'item',
+                previousSelector: !config ? null : config.previousSelector ? config.previousSelector : null,
+                nextSelector: !config ? null : config.nextSelector ? config.nextSelector : null
             });
             scope.$watchCollection('config.data', function (value) {
                 cal.update(value);

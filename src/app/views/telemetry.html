@@ -8,86 +8,32 @@
 
 <!-- Main content -->
 <section class="content">
-    <!--<div class="box box-default">-->
-        <!--<div class="box-header with-border">-->
-            <!--<h3 class="box-title"><i class="fa fa-fw fa-filter"></i>Filter By</h3>-->
-            <!--<div class="box-tools pull-right">-->
-                <!--<button type="button" ng-click="resetFilter()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-fw fa-refresh"></i>Reset</button>-->
-            <!---->
-          <!--</div>-->
-        <!--</div>-->
-        <!--&lt;!&ndash; /.box-header &ndash;&gt;-->
-        <!--&lt;!&ndash;<div class="box-body form-horizontal">&ndash;&gt;-->
-            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;<div class="col-md-4">&ndash;&gt;&ndash;&gt;-->
-                                           <!--&lt;!&ndash;&lt;!&ndash;<div class="form-group">&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">State:</label>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;&ndash;&gt;-->
-                                <!--&lt;!&ndash;&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectState" ng-model="filter.state">&ndash;&gt;&ndash;&gt;-->
-                                    <!--&lt;!&ndash;&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;&ndash;&gt;-->
-                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="running">Running</option>&ndash;&gt;&ndash;&gt;-->
-                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="stopped">Stopped</option>&ndash;&gt;&ndash;&gt;-->
-                                    <!--&lt;!&ndash;&lt;!&ndash;<option ng-value="terminated">Terminated</option>&ndash;&gt;&ndash;&gt;-->
-                                <!--&lt;!&ndash;&lt;!&ndash;</select>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
-                        <!--&lt;!&ndash;&lt;!&ndash;</div>                                        &ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">Monitoring:</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectMonitoring" ng-model="filter.monitoring">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option ng-value="true">Yes</option>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option ng-value="false">No</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div> &ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
-                   <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label for="selectState" class="col-sm-3 control-label">Remediation:</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="col-sm-9">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<select class="form-control select2 select2-hidden-accessible" id="selectRemediation" ng-model="filter.remediation">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option selected="selected" value=''>All</option>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option ng-value="true">Yes</option>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<option ng-value="false">No</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div> &ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;&lt;!&ndash; /.row &ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--</div>-->
-    <div class="table-responsive-vertical table">
+   <div class="table-responsive-vertical table">
         <table id="table" class="table table-hover table-bordered text-center">
             <thead>
                 <tr>
                     <th>Status</th>
-                    <th>Instance ID</th>
+                    <th>ID</th>
                     <th>Instance Name</th>
-                    <th>Region</th>
-                    <th>Instance Type</th>
+                    <th>Monitor Type</th>
+                    <th>Monitor URL</th>
                     <th>IP Address</th>
-                    <th>UpTime</th>
+                    <th>Creation Time</th>
                     <th>Metrics</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-if="!dataloading" ng-repeat="data in filtered = (instances | filter: filter)  | orderBy:'$index':true">
                     <td data-title="Status">
-                        <span ng-class="{'txt-green': data.state == 'running' || data.state == 'pending' || data.state == 'rebooting', 'txt-red': data.state == 'stopped' || data.state == 'stopping'}" uib-tooltip="{{data.state}}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
+                        <span ng-class="{'txt-green': data.status == 'running' || data.status == 'pending' || data.status == 'rebooting', 'txt-red': data.status == 'stopped' || data.status == 'stopping' || data.status == 'shutting-down', 'txt-grey': data.status == 'terminated'}" uib-tooltip="{{data.status}}"><i class="fa fa-fw fa-flash fa-2x"></i></span>
                     </td>
-                    <td data-title="Instance ID"><a ui-sref="home.sae({ instanceId: data.instanceId})">{{data.instanceId}}</a></td>
-                    <!--<td data-title="Instance ID">{{data.instanceId}}</td>-->
-                    <td data-title="Instance Name">{{data.instanceName}}</td>
-                    <td data-title="Region">{{data.placement}}</td>
-                    <td data-title="Instance Type">{{data.instanceType}}</td>
-                    <td data-title="IP Address">{{data.publicIp}}<br />
-                        {{data.privateIp}}</td>
-                    <td data-title="UpTime">{{data.uptime}}</td>
-                    <td data-title="UpTime"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data.instanceId, data.instanceName);">Metrics</span></td>
+                    <td data-title="ID"><a ui-sref="home.sae({ instanceId: data.id})">{{data.id}}</a></td>
+                    <td data-title="Instance Name">{{data.name}}</td>
+                    <td data-title="Region">{{data.monitorType}}</td>
+                    <td data-title="Instance Type">{{data.monitorUrl}}</td>
+                    <td data-title="IP Address">{{data.ipAddress}}</td>
+                    <td data-title="Creation Time">{{data.creationTime}}</td>
+                    <td data-title="Metrics"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data);">Metrics</span></td>
                 </tr>
                 <tr ng-if="!dataloading && filtered.length === 0">
                     <td colspan="9" class="txt-red">
