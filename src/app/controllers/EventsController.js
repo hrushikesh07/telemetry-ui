@@ -2,12 +2,12 @@
 
     angular
             .module('app')
-            .controller('AdverseEventsController', [
+            .controller('EventsController', [
                 '$scope', 'telemetryService', 'toastr', 'pageSize', 'commonService', '$stateParams',
-                AdverseEventsController
+                EventsController
             ]);
 
-    function AdverseEventsController($scope, telemetryService, toastr, pageSize, commonService, $stateParams) {
+    function EventsController($scope, telemetryService, toastr, pageSize, commonService, $stateParams) {
 
         $scope.currentView = 'adverse';
 
@@ -20,20 +20,22 @@
         $scope.corelation = false;
 
         $scope.filter = angular.copy(filters);
-        
-        $scope.selectedInstance = { value: {} }
+
+        $scope.selectedInstance = {value: {}}
 
         if ($stateParams.instanceId) {
             $scope.filter.instance = $stateParams.instanceId;
+
+        }
+
+        if ($stateParams.checkStatus) {
+            $scope.filter.status = $stateParams.checkStatus;
         }
 
         $scope.resetFilter = function () {
             $scope.selectedInstance.value = {};
             $scope.filter = angular.copy(filters);
             $scope.alertPage = 1;
-            if ($stateParams.instanceId) {
-                $scope.filter.instance = $stateParams.instanceId;
-            }
             $scope.getAlertHistory();
         };
 
@@ -53,11 +55,19 @@
         var urList = '/instances';
         telemetryService.promiseGet(urList).then(function (response) {
             $scope.instances = response;
+            if ($stateParams.instanceId) {
+                for (var j = 0; j < $scope.instances.length; j++) {
+                    if ($stateParams.instanceId === $scope.instances[j].id) {
+                        $scope.selectedInstance.value = $scope.instances[j];
+                        break;
+                    }
+                }
+            }
         }, function () {
         });
         $scope.getElkLink = function (alertData) {
             var time = alertData[$scope.alertColumns.time];
-            var instanceid = alertData[$scope.alertColumns.instanceId];
+            var instanceid = alertData[$scope.alertColumns.instanceIdId];
             return commonService.getElkLink(time, instanceid);
         };
 
@@ -68,7 +78,7 @@
             $scope.alertsLoading = true;
             $scope.alerts = [];
             var offset = ($scope.alertPage - 1) * pageSize;
-            if($scope.selectedInstance.value.id){
+            if ($scope.selectedInstance.value.id) {
                 $scope.filter.instance = $scope.selectedInstance.value.id;
             }
             telemetryService.getAlertHistoryData(offset, pageSize, $scope.filter).then(function (response) {
@@ -88,24 +98,24 @@
 
         $scope.$on('alertEvent', function (event, args) {
             var data = args.message;
-            data = Object.values(data);
-            if (data && $scope.alertPage === 1) {
+            
+            if (data && $scope.alertPage === 1 && data.significance === 'true') {
                 var filterCheck = true;
-                data[$scope.alertColumns.time] = data[$scope.alertColumns.time] * 1000;
-                if (data[$scope.alertColumns.status] > 2) {
-                    data[$scope.alertColumns.status] = 3;
+                if (data.checkStatus > 2) {
+                    data.checkStatus = 3;
                 }
                 if ($scope.filter.status && $scope.filter.status !== '') {
-                    if (data[$scope.alertColumns.status] !== $scope.filter.status) {
+                    if (data.checkStatus !== $scope.filter.status) {
                         filterCheck = false;
                     }
                 }
                 if ($scope.filter.instance && $scope.filter.instance !== '') {
-                    if (data[$scope.alertColumns.instance] !== $scope.filter.instance) {
+                    if (data.instanceId !== $scope.filter.instance) {
                         filterCheck = false;
                     }
                 }
                 if (filterCheck) {
+                    data = Object.values(data);
                     $scope.alerts.push(data);
                     if ($scope.alerts.length > pageSize) {
                         $scope.alerts = $scope.alerts.slice(-pageSize);
@@ -121,7 +131,7 @@
             for (var i = 0; i < data.length; i++) {
                 existing = false;
                 for (var j = 0; j < $scope.instances.length; j++) {
-                    if (data[i].instanceId === $scope.instances[j].instanceId) {
+                    if (data[i].id === $scope.instances[j].id) {
                         angular.extend($scope.instances[j], data[i]);
                         existing = true;
                         break;

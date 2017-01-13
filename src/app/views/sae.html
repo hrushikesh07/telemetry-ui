@@ -9,6 +9,14 @@
             <select class="form-control select2" id="instanceId" ng-model="instanceId" ng-change="getInstanceData()">
                 <option  ng-repeat="instance in instances"  value='{{instance.id}}'>{{instance.name}} - {{instance.id}}</option>
             </select>
+<!--<ui-select ng-model="instanceId" ng-change="getInstanceData()">
+                                        <ui-select-match>
+                                            <span ng-bind="$select.selected.id"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="instance in (instances | filter:$select.search) track by instance.id">
+                                            <span>{{instance.id}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>-->
         </div>
     </small>
 </section>

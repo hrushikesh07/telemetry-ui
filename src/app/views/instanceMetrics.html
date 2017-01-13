@@ -7,14 +7,14 @@
     <div class="modal-body instance-metrics">
         <div class="row">
             <div class="col-sm-6 col-md-6">
-                <h3 class="heading-title">Compute</h3>
-                <div ng-repeat="computeList in instanceData.instanceMetrics.compute" class="metrics-align" uib-tooltip="{{computeList.checkOutput}}" tooltip-placement="top-right">
+                <h3 class="heading-title">System Health</h3>
+                <div ng-repeat="computeList in instanceData.instanceMetrics.compute" class="metrics-align" uib-tooltip="{{computeList.checkOutput}} at {{computeList.checkIssued * 1000| date:'medium'}}" tooltip-placement="top-right">
                     {{computeList.checkName}}: <span ng-class="{'txt-green': computeList.checkStatus === 0, 'txt-warning': computeList.checkStatus === 1, 'txt-red': computeList.checkStatus === 2, 'txt-purple': computeList.checkStatus > 2}"><i class="fa fa-fw fa-circle pull-right"></i></span>
                 </div>
             </div>
             <div class="col-sm-6 col-md-6">
-                <h3 class="heading-title">App</h3>
-                <div ng-repeat="appList in instanceData.instanceMetrics.app" class="metrics-align" uib-tooltip="{{appList.checkOutput}}" tooltip-placement="top-right">
+                <h3 class="heading-title">App Health</h3>
+                <div ng-repeat="appList in instanceData.instanceMetrics.app" class="metrics-align" uib-tooltip="{{appList.checkOutput}} at {{computeList.checkIssued * 1000| date:'medium'}}" tooltip-placement="top-right">
                     {{appList.checkName}}: <span ng-class="{'txt-green': appList.checkStatus === 0, 'txt-warning': appList.checkStatus === 1, 'txt-red': appList.checkStatus === 2, 'txt-purple': appList.checkStatus > 2}"><i class="fa fa-fw fa-circle pull-right"></i></span>
                 </div>
             </div>

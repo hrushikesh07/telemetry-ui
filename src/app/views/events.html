@@ -1,8 +1,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Adverse Events
-        <small>{{main.selectedAccount}}</small>
+        Events
     </h1>
 </section>
 
@@ -26,11 +25,11 @@
                                 <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
                                 <div class="col-sm-9">
                                     <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status">
-                                        <option selected="selected" value=''>All</option>
-                                        <option ng-value="0">Info</option>
-                                        <option ng-value="1">Warning</option>
-                                        <option ng-value="2">Critical</option>
-                                        <option ng-value="3">Error</option>
+                                        <option value='' ng-selected="filter.status == ''">All</option>
+                                        <option ng-value="0" ng-selected="filter.status == '0'">Info</option>
+                                        <option ng-value="1" ng-selected="filter.status == '1'">Warning</option>
+                                        <option ng-value="2" ng-selected="filter.status == '2'">Critical</option>
+                                        <option ng-value="3" ng-selected="filter.status == '3'">Error</option>
                                     </select>
                                 </div>
                             </div>                                        

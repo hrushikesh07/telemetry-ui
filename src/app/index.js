@@ -21,21 +21,21 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
                     title: 'CatEye'
                 }
             })
-            .state('home.telemetry', {
-                url: '/telemetry',
-                templateUrl: 'app/views/telemetry.html',
-                controller: 'TelemetryController',
+            .state('home.instances', {
+                url: '/instances?status',
+                templateUrl: 'app/views/instances.html',
+                controller: 'InstancesController',
                 data: {
-                    title: 'Telemetry'
+                    title: 'Instances'
                 }
             })
-            .state('home.adverse', {
-                url: '/adverse/:instanceId',
-                controller: 'AdverseEventsController',
+            .state('home.events', {
+                url: '/events?instanceId&checkStatus',
+                controller: 'EventsController',
                 controllerAs: 'vm',
-                templateUrl: 'app/views/adverseEvents.html',
+                templateUrl: 'app/views/events.html',
                 data: {
-                    title: 'Adverse Events'
+                    title: 'Events'
                 }
             })
             .state('home.remediation', {
@@ -60,7 +60,7 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
         $urlRouterProvider.otherwise('/cateye');
 
     })
-//    .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
-    .constant('baseAPIUrl', 'http://192.168.152.62:8080')
+    .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
+//    .constant('baseAPIUrl', 'http://192.168.152.62:8080')
     .constant('pageSize', 10)
     .constant('saePageSize', 5);

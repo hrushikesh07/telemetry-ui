@@ -2,12 +2,10 @@
 <section class="content-header clearfix">
     <h1 class="pull-left">
         CatEye
-        <small>{{main.selectedAccount}}</small>
-        
     </h1>
     <small class="pull-right">
-            <i class="fa fa-clock-o"></i> <strong>Last Updated:&nbsp;</strong>{{catsEyeData.timestamp | date:'medium'}}
-        </small>
+        <i class="fa fa-clock-o"></i> <strong>Last Updated:&nbsp;</strong>{{catsEyeData[catsEyeColumns.time]| date:'medium'}}
+    </small>
 
     <div></div>
 </section>
@@ -18,51 +16,54 @@
     <div class="row">
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-aqua">
+            <div class="small-box bg-blue cursor-pointer" ui-sref='home.instances' uib-tooltip="{{(catsEyeColumns.totalInstancesCount)?catsEyeData[catsEyeColumns.totalInstancesCount]+' Total Instances':'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
-                    <h3><span ng-if="!dataloading">
-                        {{catsEyeData.accounts}}</span>
+                    <h3>
+                        <span ng-if="!dataloading">
+                            {{(catsEyeColumns.totalInstancesCount)?catsEyeData[catsEyeColumns.totalInstancesCount]:'NA'}}
+                        </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
-
-                    <p>AWS Accounts</p>
+                    <p>Total Instances</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-amazon"></i>
+                    <i class="fa fa-fw fa-circle-o"></i>
                 </div>
             </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-green">
+            <div class="small-box bg-green cursor-pointer" ui-sref="home.instances({ status: 'running' })" uib-tooltip="{{(catsEyeColumns.runningInstancesCount)?catsEyeData[catsEyeColumns.runningInstancesCount]+ ' Running Instances':'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
-                            {{catsEyeData.totalInstances}}</span>
-                    <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
+                            {{(catsEyeColumns.runningInstancesCount)?catsEyeData[catsEyeColumns.runningInstancesCount]:'NA'}}
+                        </span>
+                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Total AWS Instances</p>
+                    <p>Running Instances</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-fw fa-database"></i>
+                    <i class="fa fa-fw fa-circle-o"></i>
                 </div>
             </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-blue">
+            <div class="small-box bg-red cursor-pointer" ui-sref="home.instances({ status: 'stopped' })" uib-tooltip="{{(catsEyeColumns.stoppedInstancesCount)?catsEyeData[catsEyeColumns.stoppedInstancesCount]+ ' Stopped Instances':'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
-                            {{catsEyeData.totalRunning}}</span>
+                            {{(catsEyeColumns.stoppedInstancesCount)?catsEyeData[catsEyeColumns.stoppedInstancesCount]:'NA'}}
+                        </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Active AWS Instances</p>
+                    <p>Stopped Instances</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-fw fa-bolt"></i>
+                    <i class="fa fa-fw fa-circle-o"></i>
                 </div>
 
             </div>
@@ -70,17 +71,18 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-red">
+            <div class="small-box bg-gray cursor-pointer" ui-sref="home.instances({ status: 'terminated' })" uib-tooltip="{{(catsEyeColumns.terminatedInstancesCount)?catsEyeData[catsEyeColumns.terminatedInstancesCount]+' Terminated Instances':'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
-                            {{catsEyeData.totalNonRunning}}</span>
+                            {{(catsEyeColumns.terminatedInstancesCount)?catsEyeData[catsEyeColumns.terminatedInstancesCount]:'NA'}}
+                        </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Inactive AWS Instances</p>
+                    <p>Terminated Instances</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-fw fa-ban"></i>
+                    <i class="fa fa-fw fa-circle-o"></i>
                 </div>
 
             </div>
@@ -91,98 +93,34 @@
     <div class="row">
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-lime">
+            <div class="small-box bg-red cursor-pointer" ui-sref="home.events({ instanceId: catsEyeData[catsEyeColumns.criticalInstance], checkStatus: 2 })" uib-tooltip="{{(catsEyeData[catsEyeColumns.criticalInstance] !== '')?'Critical Instance '+catsEyeData[catsEyeColumns.criticalInstance]:'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
-                            {{catsEyeData.catalystMonitored}}</span>
+                            {{(catsEyeData[catsEyeColumns.criticalInstance] !== '')?(catsEyeData[catsEyeColumns.criticalInstance] | limitTo:8)+'...':'NA'}}
+                        </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Monitored AWS Instances</p>
+                    <p>Critical Instance</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-fw fa-television"></i>
+                    <i class="fa fa-fw fa-bell"></i>
                 </div>
             </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-yellow">
+            <div class="small-box bg-yellow cursor-pointer" ui-sref="home.events({ instanceId: catsEyeData[catsEyeColumns.warningInstance], checkStatus: 1 })" uib-tooltip="{{(catsEyeData[catsEyeColumns.warningInstance] !== '')?'Warning Instance '+catsEyeData[catsEyeColumns.warningInstance]:'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3>
-                        <span ng-if="!dataloading">{{catsEyeData.totalInstances - catsEyeData.catalystMonitored}}</span>
+                        <span ng-if="!dataloading">
+                            {{(catsEyeData[catsEyeColumns.warningInstance] !== '')?(catsEyeData[catsEyeColumns.warningInstance] | limitTo:8)+'...':'NA'}}
+                        </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
 
-                    <p>Unmonitored AWS Instances</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-low-vision"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6" ng-hide="true">
-            <!-- small box -->
-            <div class="small-box bg-fuchsia">
-                <div class="inner">
-                    <h3><span ng-if="!dataloading">{{catsEyeData.totalRunning}}</span>
-                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                    </h3>
-                    <p>Monitored Docker Containers</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-fw fa-cubes"></i>
-                </div>
-
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6" ng-hide="true">
-            <!-- small box -->
-            <div class="small-box bg-blue-active">
-                <div class="inner">
-                    <h3><span ng-if="!dataloading">{{catsEyeData.totalNonRunning}}</span>
-                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                    </h3>
-
-                    <p>SAEs</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-fw fa-dashboard"></i>
-                </div>
-
-            </div>
-        </div>
-        <!-- ./col -->
-    </div>
-    <div class="row">
-        <div class="col-lg-3 col-xs-6" ng-hide="true">
-            <!-- small box -->
-            <div class="small-box bg-purple">
-                <div class="inner">
-                    <h3><span ng-if="!dataloading">{{catsEyeData.catalystMonitored}}</span>
-                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                    </h3>
-
-                    <p>Applications</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-fw fa-building-o"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6" ng-hide="true">
-            <!-- small box -->
-            <div class="small-box bg-maroon">
-                <div class="inner">
-                    <h3><span ng-if="!dataloading">{{catsEyeData.totalInstances}}</span>
-                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                    </h3>
-
-                    <p>Adverse Events</p>
+                    <p>Warning Instance</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-fw fa-bell"></i>
@@ -191,20 +129,11 @@
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6" ng-hide="true">
-            <!-- small box -->
-            <div class="small-box bg-teal">
-                <div class="inner">
-                    <h3><span ng-if="!dataloading">{{catsEyeData.totalRunning}}</span>
-                        <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                    </h3>
 
-                    <p>Remediations</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-fw fa-shield"></i>
-                </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6" ng-hide="true">
 
-            </div>
         </div>
         <!-- ./col -->
     </div>

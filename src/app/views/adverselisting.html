@@ -13,8 +13,7 @@
         </thead>
         <tbody>
             <tr ng-if="!alertsLoading" ng-repeat="data in alerts|orderBy: alertColumns.time: true">
-                <td data-title="ID" ng-switch on="data[alertColumns.value]">
-                    <a ng-href="" ng-class="{'no-pointer':!corelation}" ng-click="corelation;getCorelationData(data[alertColumns.time])">
+                <td data-title="ID" ng-switch on="data[alertColumns.checkStatus]">
                     <span ng-switch-when="0" class="txt-aqua" uib-tooltip="Info">
                         <i class="fa fa-fw fa-square"></i></span>
                     <span ng-switch-when="1" class="txt-warning" uib-tooltip="Warning">
@@ -23,7 +22,6 @@
                         <i class="fa fa-fw fa-square"></i></span>
                    <span ng-switch-when="3" class="txt-purple" uib-tooltip="Error">
                         <i class="fa fa-fw fa-square"></i></span>
-                   </a>
                 </td>
                 <td data-title="ELK Link" class="blue"><span><a href="{{getElkLink(data)}}" target="_blank"><i class="fa fa-fw fa-bar-chart"></i></a></span></td>
                 <td data-title="Instance">{{data[alertColumns.instanceId]}}</td>
@@ -60,7 +58,7 @@
             </ul>
         </div>
         <div ng-if="currentView === 'sae'" class="pull-right">
-            <a ui-sref="home.adverse({ instanceId: instanceId})"><i class="fa fa-calendar-check-o"></i> All Adverse Events</a>
+            <a ui-sref="home.events({ instanceId: instanceId})"><i class="fa fa-calendar-check-o"></i> All Events</a>
         </div>
     </div>
     <div class="clearfix"></div>

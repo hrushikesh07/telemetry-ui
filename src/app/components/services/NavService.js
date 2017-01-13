@@ -16,15 +16,15 @@
             icon: 'fa fa-fw fa-eye'
           },
           {
-            name: 'Telemetry',
+            name: 'Instances',
             type: 'link',
-            state: 'home.telemetry',
+            state: 'home.instances',
             icon: 'fa fa-fw fa-tachometer'
           },
           {
-            name: 'Adverse Events',
+            name: 'Events',
             type: 'link',
-            state: 'home.adverse',
+            state: 'home.events',
             icon: 'fa fa-fw fa-bell'
           },
           {

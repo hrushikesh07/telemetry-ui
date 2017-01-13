@@ -33,16 +33,16 @@
         $scope.showCorelationData = false;
         $scope.disablePre = false;
         $scope.disableNext = false;
-        
-        
+
+
         var currentDate = new Date();
 
         var startDate = commonService.addMonths(new Date(), -3);
-        
+
         $scope.toDate = new Date(currentDate.getTime());
-        
-        $scope.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-3, 1);
-        
+
+        $scope.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);
+
         $scope.getAllInstances = function () {
             var urList = '/instances';
             telemetryService.promiseGet(urList).then(function (response) {
@@ -86,11 +86,11 @@
 
         $scope.calNavigation = function (nav) {
             if (nav === 'pre') {
-                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth()-1, 1);
+                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth() - 1, 1);
                 $scope.toDate = new Date($scope.toDate.getFullYear(), $scope.toDate.getMonth(), 0);
             } else {
-                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth()+1, 1);
-                $scope.toDate = new Date($scope.toDate.getFullYear(), $scope.toDate.getMonth()+2, 0);
+                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth() + 1, 1);
+                $scope.toDate = new Date($scope.toDate.getFullYear(), $scope.toDate.getMonth() + 2, 0);
             }
             $scope.getEventsData();
         };
@@ -103,18 +103,18 @@
         $scope.getEventsData = function () {
             $scope.eventsLoading = true;
             $scope.calConfig.data = {};
-            
-            if($scope.toDate.getTime() >= currentDate.getTime()){
-                $scope.disableNext =  true;
-            }else{
-                 $scope.disableNext =  false;
+
+            if ($scope.toDate.getTime() >= currentDate.getTime()) {
+                $scope.disableNext = true;
+            } else {
+                $scope.disableNext = false;
             }
             console.log('fromDate--->>>>' + $scope.fromDate);
             console.log('toDate--->>>>' + $scope.toDate);
-            
+
             var fromTime = $scope.fromDate.toISOString();
             var toTime = $scope.toDate.toISOString();
-            
+
             var url = '/analytics/alert/aggregate?checkStatus=' + $scope.heatmapEventsType + '&instance=' + $scope.instanceId + '&frequency=1_DAY&fromTime=' + fromTime + '&toTime=' + toTime;
             telemetryService.promiseGet(url).then(function (response) {
 
@@ -169,12 +169,11 @@
             var timeStamp = new Date(time);
             $scope.remediationData = [];
             $scope.actionHistoryData = []
+            $scope.showCorelationData = true;
             $scope.remediationLoading = true;
             $scope.actionHistoryLoading = true;
             var timeReference = timeStamp.getTime();
             telemetryService.getCorelationData($scope.instanceId, timeReference).then(function (response) {
-
-                $scope.showCorelationData = true;
                 var remediation = response.remediation;
                 $scope.actionHistoryData = response.actionHistory;
                 $scope.remediationData = remediation.remediationData;
@@ -183,6 +182,7 @@
                 $scope.actionHistoryLoading = false;
 
             }, function () {
+                $scope.showCorelationData = false;
                 $scope.remediationLoading = false;
                 $scope.actionHistoryLoading = false;
             });

@@ -1,0 +1,111 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Instances
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-fw fa-filter"></i>Filter By</h3>
+            <div class="box-tools pull-right">
+                <button type="button" ng-click="resetFilter()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-fw fa-refresh"></i>Reset</button>
+
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body form-horizontal">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status">
+                                        <option value="" ng-selected="filter.status == ''">All</option>
+                                        <option value="running" ng-selected="filter.status == 'running'">Running</option>
+                                        <option value="stopped" ng-selected="filter.status == 'stopped'">Stopped</option>
+                                        <option value="terminated" ng-selected="filter.status == 'terminated'">Terminated</option>
+                                    </select>
+                                </div>
+                            </div>                                        
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                                <label for="selectState" class="col-sm-3 control-label">Instance</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" ng-model="filter.instance" ng-model-options="{debounce: 200}" />
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" title="Search" class="btn btn-xs btn-search" ng-click="getInstances('')">
+                                <i class="fa fa-fw fa-search white"></i>
+                            </button>
+                            <!--                            <div class="form-group">
+                                                            <label for="selectState" class="col-sm-3 control-label">Check</label>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control " id="selectMonitoring" ng-model="filter.checkName" ng-model-options="{ debounce: 200 }" />
+                                                            </div>
+                            
+                                                        </div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <div class="table-responsive-vertical table">
+        <table id="table" class="table table-hover table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>ID</th>
+                    <th>Instance Name</th>
+                    <th>Monitor Type</th>
+                    <th>Monitor URL</th>
+                    <th>IP Address</th>
+                    <th>Creation Time</th>
+                    <th>Metrics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="!dataloading" ng-repeat="data in instances| orderBy: 'creationTime': true">
+                    <td data-title="Status">
+                        <span ng-class="{'txt-green': data.status == 'running' || data.status == 'pending' || data.status == 'rebooting', 'txt-red': data.status == 'stopped' || data.status == 'stopping' || data.status == 'shutting-down', 'txt-gray': data.status == 'terminated'}" uib-tooltip="{{data.status}}"><i class="fa fa-fw fa-circle-o fa-2x"></i></span>
+                    </td>
+                    <td data-title="ID"><a ui-sref="home.sae({ instanceId: data.id})">{{data.id}}</a></td>
+                    <td data-title="Instance Name">{{data.name}}</td>
+                    <td data-title="Region">{{data.monitorType}}</td>
+                    <td data-title="Instance Type">{{data.monitorUrl}}</td>
+                    <td data-title="IP Address">{{data.ipAddress}}</td>
+                    <td data-title="Creation Time">{{data.creationTime}}</td>
+                    <td data-title="Metrics"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data);">Metrics</span></td>
+                </tr>
+                <tr ng-if="!dataloading && instances.length === 0">
+                    <td colspan="9" class="txt-red">
+                        No Data Found
+                    </td>
+                </tr>
+                <tr ng-if="dataloading">
+                    <td colspan="9" class="txt-theme">
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -1,22 +1,28 @@
 (function () {
 
     angular
-        .module('app')
-        .controller('TelemetryController', [
-            '$scope', 'telemetryService', '$uibModal', 'toastr',
-            TelemetryController
-        ]);
+            .module('app')
+            .controller('InstancesController', [
+                '$scope', 'telemetryService', '$uibModal', 'toastr', '$stateParams',
+                InstancesController
+            ]);
 
-    function TelemetryController($scope, telemetryService, $uibModal, toastr) {
+    function InstancesController($scope, telemetryService, $uibModal, toastr, $stateParams) {
 
         var filters = {
-            status: ''
+            status: '',
+            instance: ''
         };
 
         $scope.filter = angular.copy(filters);
 
+        if ($stateParams.status) {
+            $scope.filter.status = $stateParams.status;
+        }
+
         $scope.resetFilter = function () {
             $scope.filter = angular.copy(filters);
+            $scope.getInstances();
         };
 
         $scope.instances = [];
@@ -26,12 +32,33 @@
         $scope.dataloading = true;
         $scope.showInstanceMetrics = false;
 
-        var url = '/instances';
-        telemetryService.promiseGet(url).then(function (response) {
-            $scope.instances = response;
-            $scope.dataloading = false;
-        }, function () {
-        });
+        $scope.getInstances = function () {
+            var url = '/instances';
+            
+            var filterCheck = false;
+
+            if ($scope.filter.status && $scope.filter.status !== '') {
+                url += '?status=' + $scope.filter.status;
+                filterCheck = true;
+            }
+            
+            if ($scope.filter.instance && $scope.filter.instance !== '') {
+                if(filterCheck){
+                   url +='&'; 
+                }else{
+                   url +='?'; 
+                }
+                url += 'id=' + $scope.filter.instance;
+            }
+
+            telemetryService.promiseGet(url).then(function (response) {
+                $scope.instances = response;
+                $scope.dataloading = false;
+            }, function () {
+            });
+        };
+
+
 
 
         $scope.showIntanceMetrics = function (instance) {
@@ -85,6 +112,11 @@
         $scope.$on('monitoringEvent', function () {
             $scope.$broadcast('updateMetrics');
         });
+        
+        function init() {
+            $scope.getInstances();
+        }
+        init();
     }
 
 })();
