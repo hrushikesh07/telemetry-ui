@@ -47,7 +47,6 @@
                         });
                     }
                     $scope.$broadcast('alertEvent', {message: parsedJson.messageBody});
-
                     break;
                 default:
                 //console.log(parsedJson.ping)
