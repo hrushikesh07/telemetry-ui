@@ -41,7 +41,7 @@
                     $scope.$broadcast('monitoringEvent');
                     break;
                 case "alert":
-                    if (parsedJson.messageBody.checkStatus && parsedJson.messageBody.checkStatus === '2') {
+                    if (parsedJson.messageBody.checkStatus && parsedJson.messageBody.checkStatus === '2' && parsedJson.messageBody.significance === 'true') {
                         toastr.error(parsedJson.messageBody.checkOutput, 'Critical', {
                             closeButton: true
                         });
