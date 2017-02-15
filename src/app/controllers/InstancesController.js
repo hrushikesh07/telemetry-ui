@@ -1,11 +1,11 @@
 (function () {
 
     angular
-            .module('app')
-            .controller('InstancesController', [
-                '$scope', 'telemetryService', '$uibModal', 'toastr', '$stateParams',
-                InstancesController
-            ]);
+        .module('app')
+        .controller('InstancesController', [
+            '$scope', 'telemetryService', '$uibModal', 'toastr', '$stateParams',
+            InstancesController
+        ]);
 
     function InstancesController($scope, telemetryService, $uibModal, toastr, $stateParams) {
 
@@ -34,19 +34,19 @@
 
         $scope.getInstances = function () {
             var url = '/instances';
-            
+
             var filterCheck = false;
 
             if ($scope.filter.status && $scope.filter.status !== '') {
                 url += '?status=' + $scope.filter.status;
                 filterCheck = true;
             }
-            
+
             if ($scope.filter.instance && $scope.filter.instance !== '') {
-                if(filterCheck){
-                   url +='&'; 
-                }else{
-                   url +='?'; 
+                if (filterCheck) {
+                    url += '&';
+                } else {
+                    url += '?';
                 }
                 url += 'id=' + $scope.filter.instance;
             }
@@ -92,18 +92,35 @@
         };
 
         $scope.$on('listInstancesEvent', function (event, args) {
-            var data = args.message, existing;
+            var data = args.message, existing, filterCheck;
             for (var i = 0; i < data.length; i++) {
-                existing = false;
-                for (var j = 0; j < $scope.instances.length; j++) {
-                    if (data[i].id === $scope.instances[j].id) {
-                        angular.extend($scope.instances[j], data[i]);
-                        existing = true;
-                        break;
+                existing = false, filterCheck = true;
+                if ($scope.filter.status && $scope.filter.status !== '') {
+                    if (data[i].status !== $scope.filter.status) {
+                        filterCheck = false;
                     }
                 }
-                if (!existing) {
-                    $scope.instances.push(data[i]);
+                if ($scope.filter.instance && $scope.filter.instance !== '') {
+                    if (data[i].id !== $scope.filter.instance) {
+                        filterCheck = false;
+                    }
+                }
+                if (filterCheck) {
+                    for (var j = 0; j < $scope.instances.length; j++) {
+                        if ($scope.filter.instance && $scope.filter.instance !== '') {
+                            if (data.instanceId !== $scope.filter.instance) {
+                                filterCheck = false;
+                            }
+                        }
+                        if (data[i].id === $scope.instances[j].id) {
+                            angular.extend($scope.instances[j], data[i]);
+                            existing = true;
+                            break;
+                        }
+                    }
+                    if (!existing) {
+                        $scope.instances.push(data[i]);
+                    }
                 }
             }
             $scope.$apply();
@@ -112,7 +129,7 @@
         $scope.$on('monitoringEvent', function () {
             $scope.$broadcast('updateMetrics');
         });
-        
+
         function init() {
             $scope.getInstances();
         }

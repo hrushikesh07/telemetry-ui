@@ -1,24 +1,26 @@
 <section class="content-header">
-    <h1 class="pull-left">
-        SAE Dashboard
-        <small>{{instanceId}}</small>
-    </h1>
-    <small class="pull-right">
-        <div class="form-group inline-form">
-            <label>Instance: </label>
-            <select class="form-control select2" id="instanceId" ng-model="instanceId" ng-change="getInstanceData()">
-                <option  ng-repeat="instance in instances"  value='{{instance.id}}'>{{instance.name}} - {{instance.id}}</option>
-            </select>
-<!--<ui-select ng-model="instanceId" ng-change="getInstanceData()">
-                                        <ui-select-match>
-                                            <span ng-bind="$select.selected.id"></span>
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="instance in (instances | filter:$select.search) track by instance.id">
-                                            <span>{{instance.id}}</span>
-                                        </ui-select-choices>
-                                    </ui-select>-->
+    <div class="row">
+        <div class="col-md-7">
+            <h1 >
+                SAE Dashboard
+                <small>{{instanceId}}</small>
+            </h1>
         </div>
-    </small>
+        <div class="col-md-5">
+            <div class="inline-form">
+                <label class="instance-label">Instance: &nbsp;</label>
+                <ui-select ng-model="selectedInstance.value" ng-change="getInstanceData()" class="pull-right sae-intsance">
+                   
+                    <ui-select-match>
+                        <span ng-bind="$select.selected.id"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="instance in (instances | filter:$select.search) | orderBy: 'creationTime': true">
+                        <span>{{instance.name}} - {{instance.ipAddress}}</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Main content -->
@@ -46,7 +48,7 @@
                 <div class="box-body">
                     <div id="interactive">
                         <div ng-class="{'critical-heatmap': heatmapEventsType == 2, 'warning-heatmap': heatmapEventsType == 1}">
-                            <span class="cal-timeStamp">{{fromDate | date : 'MMM yyyy'}} - {{toDate | date : 'MMM yyyy'}}</span>
+                            <span class="cal-timeStamp">{{fromDate| date : 'MMM yyyy'}} - {{toDate| date : 'MMM yyyy'}}</span>
                             <div class="cal-navigation">
                                 <button class="btn btn-xs" id="previousSelector-a-previous" ng-disabled='disablePre' ng-click="calNavigation('pre');">Previous</button>
                                 <button class="btn btn-xs" id="previousSelector-a-next" ng-disabled='disableNext' ng-click="calNavigation('next');">Next</button>
@@ -67,11 +69,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="pull-right right-text"><span ng-if="timeFilter.startTime"><i class="fa fa-clock-o"></i> {{timeFilter.startTime| date:'MMM d, yyyy'}} &nbsp; &nbsp; <a class="btn btn-primary btn-xs" ng-href="" ng-click="showAll();">Show All</a></span></div>
-            <div ng-include="'app/views/adverselisting.html'"></div>
+            <div ng-include="'app/views/eventslisting.html'"></div>
         </div>
     </div>
 
-    <div class="row" ng-show="showCorelationData">
+    <div class="row" ng-show="showCorelationData" id="corelationData">
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <uib-tabset active="active">                    

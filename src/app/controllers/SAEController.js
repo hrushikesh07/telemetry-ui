@@ -1,14 +1,14 @@
 (function () {
 
     angular
-            .module('app', ['nvd3', 'calHeatmap'])
-            .controller('SAEController', [
-                '$scope', '$stateParams', 'telemetryService', 'commonService', 'saePageSize', '$filter', SAEController
-            ]);
-    function SAEController($scope, $stateParams, telemetryService, commonService, saePageSize, $filter) {
+        .module('app', ['nvd3', 'calHeatmap'])
+        .controller('SAEController', [
+            '$scope', '$stateParams', 'telemetryService', 'commonService', 'saePageSize', '$location', '$anchorScroll', SAEController
+        ]);
+    function SAEController($scope, $stateParams, telemetryService, commonService, saePageSize, $location, $anchorScroll) {
 
         $scope.currentView = 'sae';
-        $scope.instanceId = $stateParams.instanceId;
+        $scope.selectedInstance = {value: {}}
         $scope.heatmapEventsType = 2; //2: Critical, 1: Warning
         $scope.alerts = [];
         $scope.remediationData = [];
@@ -47,8 +47,17 @@
             var urList = '/instances';
             telemetryService.promiseGet(urList).then(function (response) {
                 $scope.instances = response;
-                if (!$scope.instanceId) {
-                    $scope.instanceId = $scope.instances[0].id;
+                if ($stateParams.instanceId) {
+                    for (var j = 0; j < $scope.instances.length; j++) {
+                        if ($stateParams.instanceId === $scope.instances[j].id) {
+                            $scope.selectedInstance.value = $scope.instances[j];
+                            $scope.getEventsData();
+                            $scope.getAlertHistory();
+                            break;
+                        }
+                    }
+                } else {
+                    $scope.selectedInstance.value = $scope.instances[0];
                     $scope.getEventsData();
                     $scope.getAlertHistory();
                 }
@@ -57,6 +66,7 @@
         };
 
         $scope.getInstanceData = function () {
+            $scope.showCorelationData = false;
             $scope.getEventsData();
             $scope.getAlertHistory();
         };
@@ -115,7 +125,7 @@
             var fromTime = $scope.fromDate.toISOString();
             var toTime = $scope.toDate.toISOString();
 
-            var url = '/analytics/alert/aggregate?checkStatus=' + $scope.heatmapEventsType + '&instance=' + $scope.instanceId + '&frequency=1_DAY&fromTime=' + fromTime + '&toTime=' + toTime;
+            var url = '/analytics/alert/aggregate?checkStatus=' + $scope.heatmapEventsType + '&instance=' + $scope.selectedInstance.value.id + '&frequency=1_DAY&fromTime=' + fromTime + '&toTime=' + toTime;
             telemetryService.promiseGet(url).then(function (response) {
 
                 var data;
@@ -154,7 +164,7 @@
             var offset = ($scope.alertPage - 1) * saePageSize;
             var filter = {
                 status: $scope.heatmapEventsType,
-                instance: $scope.instanceId
+                instance: $scope.selectedInstance.value.id
             };
             telemetryService.getAlertHistoryData(offset, saePageSize, filter, $scope.timeFilter).then(function (response) {
                 $scope.alerts = response.alerts;
@@ -166,6 +176,8 @@
         };
 
         $scope.getCorelationData = function (time) {
+            $location.hash('corelationData');
+            $anchorScroll();
             var timeStamp = new Date(time);
             $scope.remediationData = [];
             $scope.actionHistoryData = []
@@ -173,13 +185,14 @@
             $scope.remediationLoading = true;
             $scope.actionHistoryLoading = true;
             var timeReference = timeStamp.getTime();
-            telemetryService.getCorelationData($scope.instanceId, timeReference).then(function (response) {
+            telemetryService.getCorelationData($scope.selectedInstance.value.id, timeReference).then(function (response) {
                 var remediation = response.remediation;
                 $scope.actionHistoryData = response.actionHistory;
                 $scope.remediationData = remediation.remediationData;
                 $scope.remediationColumns = remediation.remediationColumns;
                 $scope.remediationLoading = false;
                 $scope.actionHistoryLoading = false;
+
 
             }, function () {
                 $scope.showCorelationData = false;
@@ -195,7 +208,7 @@
 
         function init() {
             $scope.getAllInstances();
-            if ($scope.instanceId) {
+            if ($scope.selectedInstance.value.id) {
                 $scope.getEventsData();
                 $scope.getAlertHistory();
             }

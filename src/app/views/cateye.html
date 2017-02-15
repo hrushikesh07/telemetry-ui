@@ -95,8 +95,8 @@
             <!-- small box -->
             <div class="small-box bg-red cursor-pointer" ui-sref="home.events({ instanceId: catsEyeData[catsEyeColumns.criticalInstance], checkStatus: 2 })" uib-tooltip="{{(catsEyeData[catsEyeColumns.criticalInstance] !== '')?'Critical Instance '+catsEyeData[catsEyeColumns.criticalInstance]:'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
-                    <h3><span ng-if="!dataloading" style="font-size: 18px;">
-                            {{(catsEyeData[catsEyeColumns.criticalInstance] !== '')?catsEyeData[catsEyeColumns.criticalInstance]:'NA'}}
+                    <h3><span ng-if="!dataloading" class="font-24">
+                            {{(catsEyeData[catsEyeColumns.criticalInstanceIP] !== '')?catsEyeData[catsEyeColumns.criticalInstanceIP]:'NA'}}
                         </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>
@@ -114,8 +114,8 @@
             <div class="small-box bg-yellow cursor-pointer" ui-sref="home.events({ instanceId: catsEyeData[catsEyeColumns.warningInstance], checkStatus: 1 })" uib-tooltip="{{(catsEyeData[catsEyeColumns.warningInstance] !== '')?'Warning Instance '+catsEyeData[catsEyeColumns.warningInstance]:'NA'}}" tooltip-placement="top-center">
                 <div class="inner">
                     <h3>
-                        <span ng-if="!dataloading" style="font-size: 18px;">
-                            {{(catsEyeData[catsEyeColumns.warningInstance] !== '')?catsEyeData[catsEyeColumns.warningInstance]:'NA'}}
+                        <span ng-if="!dataloading" class="font-24">
+                            {{(catsEyeData[catsEyeColumns.warningInstanceIP] !== '')?catsEyeData[catsEyeColumns.warningInstanceIP]:'NA'}}
                         </span>
                         <span ng-if="dataloading"> <i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </h3>

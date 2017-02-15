@@ -43,8 +43,8 @@
                                         <ui-select-match>
                                             <span ng-bind="$select.selected.id"></span>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="instance in (instances | filter:$select.search) track by instance.id">
-                                            <span>{{instance.id}}</span>
+                                        <ui-select-choices repeat="instance in (instances | filter:$select.search) | orderBy: 'creationTime': true">
+                                            <span>{{instance.name}} - {{instance.ipAddress}}</span>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -75,5 +75,5 @@
             <!-- /.row -->
         </div>
     </div>
-    <div ng-include="'app/views/adverselisting.html'"></div>
+    <div ng-include="'app/views/eventslisting.html'"></div>
 </section>

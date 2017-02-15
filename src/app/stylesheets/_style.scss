@@ -1,4 +1,4 @@
-    /*
+/*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
@@ -17,7 +17,7 @@ html, body {
 }
 
 ul {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 .layout-boxed {
@@ -104,6 +104,18 @@ a{
     }
 }
 
+.width-90{
+    width: 90px;
+}
+
+.font-18{
+    font-size: 18px;
+}
+
+.font-24{
+    font-size: 24px;
+}
+
 .btn.btn-search{
     background-color: #005384;
     color: #fff;
@@ -126,6 +138,10 @@ a{
 
 .align-center{
     text-align: center;
+}
+
+.align-right{
+    text-align: right;
 }
 
 .navbar-header small{
@@ -164,6 +180,19 @@ a[disabled] {pointer-events: none;}
         font-weight: 500;
         font-size: 1.3em;
     }
+}
+
+.sae-intsance{
+    .ui-select-toggle,.ui-select-search{
+        width: 300px !important;  
+    }
+}
+
+.instance-label{
+    width: 30%; 
+    display: inline-block; 
+    text-align: right;
+    line-height: 28px;
 }
 
 .no-pointer{
@@ -543,42 +572,40 @@ a {
 .content-header {
     position: relative;
     padding: 15px 15px 0 15px;
-    > {
-        h1 {
-            margin: 0;
-            font-size: 24px;
-            > small {
-                font-size: 15px;
-                display: inline-block;
-                padding-left: 4px;
-                font-weight: 300;
-            }
+    h1 {
+        margin: 0;
+        font-size: 24px;
+        > small {
+            font-size: 15px;
+            display: inline-block;
+            padding-left: 4px;
+            font-weight: 300;
         }
-        .breadcrumb {
-            float: right;
-            background: transparent;
-            margin-top: 0;
-            margin-bottom: 0;
-            font-size: 12px;
-            padding: 7px 5px;
-            position: absolute;
-            top: 15px;
-            right: 10px;
-            border-radius: 2px;
-            > li {
-                > a {
-                    color: #444;
-                    text-decoration: none;
-                    display: inline-block;
-                    > {
-                        .fa, .glyphicon, .ion {
-                            margin-right: 5px;
-                        }
+    }
+    .breadcrumb {
+        float: right;
+        background: transparent;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 12px;
+        padding: 7px 5px;
+        position: absolute;
+        top: 15px;
+        right: 10px;
+        border-radius: 2px;
+        > li {
+            > a {
+                color: #444;
+                text-decoration: none;
+                display: inline-block;
+                > {
+                    .fa, .glyphicon, .ion {
+                        margin-right: 5px;
                     }
                 }
-                + li:before {
-                    content: '>\00a0';
-                }
+            }
+            + li:before {
+                content: '>\00a0';
             }
         }
     }

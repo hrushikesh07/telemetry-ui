@@ -55,8 +55,9 @@
                             data = response.results[0].series[0];
                             alertColumns = commonService.toObject(data.columns);
                             angular.forEach(data.values, function (value) {
-                                if (value[alertColumns.status] > 2) {
-                                    value[alertColumns.status] = 3;
+                                if (value[alertColumns.checkStatus] > 2) {
+                                    value[alertColumns.checkStatus] = '3';
+                                    value[alertColumns.value] = 3;
                                 }
                                 alerts.push(value);
                             });
