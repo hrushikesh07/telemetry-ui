@@ -20,7 +20,8 @@
             var timeStampIso = timeStamp.toISOString();
             var timeStampMinus = new Date(timeStamp.getTime() - (5 * 60 * 1000));
             var timeStampMinusIso = timeStampMinus.toISOString();
-            var elkLink = "http://elk.rlcatalyst.com/search/" + instanceid + "/" + timeStampMinusIso + "/" + timeStampIso;
+           // var elkLink = "http://elk.rlcatalyst.com/search/" + instanceid + "/" + timeStampMinusIso + "/" + timeStampIso;
+            var elkLink = "http://elk.rlcatalyst.com";
             return encodeURI(elkLink);
         };
         this.addMonths = function (date, months) {

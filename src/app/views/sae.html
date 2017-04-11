@@ -12,7 +12,8 @@
                 <ui-select ng-model="selectedInstance.value" ng-change="getInstanceData()" class="pull-right sae-intsance">
                    
                     <ui-select-match>
-                        <span ng-bind="$select.selected.id"></span>
+                        <span ng-if="$select.selected.name">{{$select.selected.name}} - {{$select.selected.ipAddress}}</span>
+                        <span ng-if="!$select.selected.name"><i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
                     </ui-select-match>
                     <ui-select-choices repeat="instance in (instances | filter:$select.search) | orderBy: 'creationTime': true">
                         <span>{{instance.name}} - {{instance.ipAddress}}</span>

@@ -92,7 +92,7 @@
                     <td data-title="Region">{{data.monitorType}}</td>
                     <td data-title="Instance Type">{{data.monitorUrl}}</td>
                     <td data-title="IP Address">{{data.ipAddress}}</td>
-                    <td data-title="Creation Time">{{data.creationTime}}</td>
+                    <td data-title="Creation Time">{{data.creationTime| date:'medium'}}</td>
                     <td data-title="Metrics"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data);">Metrics</span></td>
                 </tr>
                 <tr ng-if="!dataloading && instances.length === 0">
