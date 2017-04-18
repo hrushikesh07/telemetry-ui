@@ -26,6 +26,20 @@
                     });
             return deferred.promise;
         };
+        this.promiseOwn = function (paramsObject) {
+            return $http(paramsObject);
+        };
+        this.promisePost = function (paramsObject) {
+            var deferred = $q.defer();
+            $http.post(fullUrl(paramsObject.url),paramsObject.data)
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data) {
+                    deferred.reject();
+                });
+            return deferred.promise;
+        };
         this.getAlertHistoryData = function (offset, pageSize, filter, timeFilter) {
             var url = '/alerthistory?orderBy=DESC&limit=' + pageSize + '&offset=' + offset;
             if (filter.significance) {

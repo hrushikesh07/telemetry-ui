@@ -15,8 +15,8 @@
 
     <div class="row">
         <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-blue cursor-pointer" ui-sref='home.instances' uib-tooltip="{{(catsEyeColumns.totalInstancesCount)?catsEyeData[catsEyeColumns.totalInstancesCount]+' Total Instances':'NA'}}" tooltip-placement="top-center">
+            <!-- small box  uib-tooltip="{{(catsEyeColumns.totalInstancesCount)?catsEyeData[catsEyeColumns.totalInstancesCount]+' Total Instances':'NA'}}" tooltip-placement="top-center"-->
+            <div class="small-box bg-blue cursor-pointer" ui-sref='home.instances' >
                 <div class="inner">
                     <h3>
                         <span ng-if="!dataloading">
@@ -33,8 +33,8 @@
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green cursor-pointer" ui-sref="home.instances({ status: 'running' })" uib-tooltip="{{(catsEyeColumns.runningInstancesCount)?catsEyeData[catsEyeColumns.runningInstancesCount]+ ' Running Instances':'NA'}}" tooltip-placement="top-center">
+            <!-- small box  uib-tooltip="{{(catsEyeColumns.runningInstancesCount)?catsEyeData[catsEyeColumns.runningInstancesCount]+ ' Running Instances':'NA'}}" tooltip-placement="top-center"-->
+            <div class="small-box bg-green cursor-pointer" ui-sref="home.instances({ status: 'running' })" >
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
                             {{(catsEyeColumns.runningInstancesCount)?catsEyeData[catsEyeColumns.runningInstancesCount]:'NA'}}
@@ -51,8 +51,8 @@
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red cursor-pointer" ui-sref="home.instances({ status: 'stopped' })" uib-tooltip="{{(catsEyeColumns.stoppedInstancesCount)?catsEyeData[catsEyeColumns.stoppedInstancesCount]+ ' Stopped Instances':'NA'}}" tooltip-placement="top-center">
+            <!-- small box uib-tooltip="{{(catsEyeColumns.stoppedInstancesCount)?catsEyeData[catsEyeColumns.stoppedInstancesCount]+ ' Stopped Instances':'NA'}}" tooltip-placement="top-center"-->
+            <div class="small-box bg-red cursor-pointer" ui-sref="home.instances({ status: 'stopped' })" >
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
                             {{(catsEyeColumns.stoppedInstancesCount)?catsEyeData[catsEyeColumns.stoppedInstancesCount]:'NA'}}
@@ -70,8 +70,8 @@
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-gray cursor-pointer" ui-sref="home.instances({ status: 'terminated' })" uib-tooltip="{{(catsEyeColumns.terminatedInstancesCount)?catsEyeData[catsEyeColumns.terminatedInstancesCount]+' Terminated Instances':'NA'}}" tooltip-placement="top-center">
+            <!-- small box  uib-tooltip="{{(catsEyeColumns.terminatedInstancesCount)?catsEyeData[catsEyeColumns.terminatedInstancesCount]+' Terminated Instances':'NA'}}" tooltip-placement="top-center" -->
+            <div class="small-box bg-gray cursor-pointer" ui-sref="home.instances({ status: 'terminated' })">
                 <div class="inner">
                     <h3><span ng-if="!dataloading">
                             {{(catsEyeColumns.terminatedInstancesCount)?catsEyeData[catsEyeColumns.terminatedInstancesCount]:'NA'}}

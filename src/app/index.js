@@ -55,12 +55,20 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
                 data: {
                     title: 'SAE Dashboard'
                 }
-            });
+            }).state('home.serviceSae', {
+            url: '/serviceSae',
+            controller: 'servicesaeController',
+            controllerAs: 'serSae',
+            templateUrl: 'app/views/serviceSae.html',
+            data: {
+                title: 'Service Sae Dashboard'
+            }
+        });
 
         $urlRouterProvider.otherwise('/cateye');
 
     })
     .constant('baseAPIUrl', 'https://telemetry-api.rlcatalyst.com')
-//    .constant('baseAPIUrl', 'http://192.168.152.62:8080')
+//.constant('baseAPIUrl', 'http://192.168.152.154:8080')
     .constant('pageSize', 10)
     .constant('saePageSize', 5);

@@ -18,44 +18,32 @@
         <!-- /.box-header -->
         <div class="box-body form-horizontal">
             <div class="row">
-                <div class="col-md-11">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="selectStatus" class="col-sm-3 control-label">Status:</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status">
-                                        <option value="" ng-selected="filter.status == ''">All</option>
-                                        <option value="running" ng-selected="filter.status == 'running'">Running</option>
-                                        <option value="stopped" ng-selected="filter.status == 'stopped'">Stopped</option>
-                                        <option value="terminated" ng-selected="filter.status == 'terminated'">Terminated</option>
-                                    </select>
-                                </div>
-                            </div>                                        
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
 
-                                <label for="selectState" class="col-sm-3 control-label">Instance</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" placeholder="Search by ID" ng-model="filter.instance" ng-model-options="{debounce: 200}" />
-                                </div>
-                            </div> 
-                        </div>
-                        <div class="col-md-4">
-                            <button type="button" title="Search" class="btn btn-xs btn-search" ng-click="getInstances('')">
-                                <i class="fa fa-fw fa-search white"></i>
-                            </button>
-                            <!--                            <div class="form-group">
-                                                            <label for="selectState" class="col-sm-3 control-label">Check</label>
-                                                            <div class="col-sm-9">
-                                                                <input class="form-control " id="selectMonitoring" ng-model="filter.checkName" ng-model-options="{ debounce: 200 }" />
-                                                            </div>
-                            
-                                                        </div> -->
-                        </div>
-                    </div>
+                <div class="col-lg-3 col-md-3 margintop15" >
+                    <label>Status:
+                    </label>
+                    <select class="form-control select2 select2-hidden-accessible" id="selectStatus" ng-model="filter.status">
+                        <option value="" ng-selected="filter.status == ''">All</option>
+                        <option value="running" ng-selected="filter.status == 'running'">Running</option>
+                        <option value="stopped" ng-selected="filter.status == 'stopped'">Stopped</option>
+                        <option value="terminated" ng-selected="filter.status == 'terminated'">Terminated</option>
+                    </select>
                 </div>
+
+                <div class="col-lg-3 col-md-3 margintop15" >
+                    <label>Instance Id:
+                    </label>
+                    <input class="form-control" placeholder="Search by ID" ng-model="filter.instance" ng-model-options="{debounce: 200}" />
+                </div>
+
+                <div class="col-lg-3 col-md-3 margintop15" style="padding-top: 26px;" >
+                    <button type="button" title="Search" class="btn btn-xs btn-search" ng-click="getInstances('')">
+                        <i class="fa fa-fw fa-search white"></i>
+                    </button>
+                </div>
+
+
+
                 <div class="col-md-1">
                     <div class="row">
                         <div class="col-sm-12">
@@ -69,7 +57,7 @@
         </div>
     </div>
     <div class="table-responsive-vertical table">
-        <table id="table" class="table table-hover table-bordered text-center">
+        <table id="table" class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th>Status</th>
@@ -90,18 +78,18 @@
                     <td data-title="ID"><a ui-sref="home.sae({ instanceId: data.id})">{{data.id}}</a></td>
                     <td data-title="Instance Name">{{data.name}}</td>
                     <td data-title="Region">{{data.monitorType}}</td>
-                    <td data-title="Instance Type">{{data.monitorUrl}}</td>
+                    <td data-title="Instance Type"><a href="{{data.monitorUrl}}" target="_blank"> {{data.monitorUrl}}</a></td>
                     <td data-title="IP Address">{{data.ipAddress}}</td>
                     <td data-title="Creation Time">{{data.creationTime| date:'medium'}}</td>
                     <td data-title="Metrics"><span class="cursor-pointer a-link" ng-click="showIntanceMetrics(data);">Metrics</span></td>
                 </tr>
                 <tr ng-if="!dataloading && instances.length === 0">
-                    <td colspan="9" class="txt-red">
+                    <td colspan="9" class="txt-red text-center">
                         No Data Found
                     </td>
                 </tr>
                 <tr ng-if="dataloading">
-                    <td colspan="9" class="txt-theme">
+                    <td colspan="9" class="txt-theme text-center">
                         <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> 
                     </td>
                 </tr>

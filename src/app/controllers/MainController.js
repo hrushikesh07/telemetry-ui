@@ -3,7 +3,7 @@
     angular
             .module('app')
             .controller('MainController', [
-                'navService', '$scope', 'telemetryService', 'toastr', 'baseAPIUrl',
+                'navService', '$scope','$rootScope', 'telemetryService', 'toastr', 'baseAPIUrl',
                 MainController
             ])
             .filter('pagination', function ()
@@ -15,9 +15,9 @@
                 };
             });
 
-    function MainController(navService, $scope, telemetryService, toastr, baseAPIUrl) {
+    function MainController(navService, $scope, $rootScope,telemetryService, toastr, baseAPIUrl) {
         var vm = this;
-
+        $rootScope.year=new Date().getFullYear();
         var urlToFetch = baseAPIUrl + '/catalyst_telemetry_events';
 
         var evtSource;

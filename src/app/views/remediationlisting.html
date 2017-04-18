@@ -13,7 +13,7 @@
             <tr ng-if="!remediationLoading" ng-repeat="data in remediationData track by $index">
                 <td data-title="Instance ID">{{data[remediationColumns.instanceId]}}</td>
                 <td data-title="Timestamp">{{data[remediationColumns.time]| date:'medium'}}</td>
-                <td data-title="Ticket"><a ng-href="{{data[remediationColumns.ticketId]}}" target="_blank">{{data[remediationColumns.ticketId] | getTicketID}}</a></td>
+                <td data-title="{{data[remediationColumns.ticketId]}}"  ><a title="{{data[remediationColumns.ticketId]}}" class="ellipsis" ng-href="{{data[remediationColumns.ticketId]}}" target="_blank">{{data[remediationColumns.ticketId] | getTicketID}}</a></td>
                 <td data-title="Log Message">{{data[remediationColumns.logMessage]}}</td>
             </tr>
             <tr ng-if="!remediationLoading && remediationData.length === 0">

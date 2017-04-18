@@ -404,7 +404,7 @@ body.hold-transition {
 /* Content */
 
 .content {
-    min-height: 500px;
+    min-height: 530px;
     padding: 15px;
     margin-right: auto;
     margin-left: auto;
@@ -1923,7 +1923,7 @@ a {
     }
     &:hover {
         text-decoration: none;
-        color: #f9f9f9;
+        //color: #f9f9f9;
         .icon {
             font-size: 80px;
         }
@@ -5662,4 +5662,12 @@ table.text-center {
             }
         }
     }
+}
+
+.ellipsis{
+    width:200px;
+    display:block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

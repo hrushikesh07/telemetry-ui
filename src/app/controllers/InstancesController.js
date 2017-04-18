@@ -72,7 +72,7 @@
                     controller: 'instanceMetricsController',
                     backdrop: 'static',
                     keyboard: false,
-                    size: 'lg',
+                    size: 'md',
                     scope: $scope,
                     resolve: {
                         instanceData: function () {
