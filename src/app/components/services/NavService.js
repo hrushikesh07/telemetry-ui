@@ -21,6 +21,12 @@
             state: 'home.instances',
             icon: 'fa fa-fw fa-tachometer'
           },
+            {
+                name: 'Services',
+                type: 'link',
+                state: 'home.serviceSae',
+                icon: 'fa fa-sellsy'
+            },
           {
             name: 'Events',
             type: 'link',
@@ -38,13 +44,7 @@
             type: 'link',
             state: 'home.sae',
             icon: 'fa fa-fw fa-area-chart'
-          },
-        {
-            name: 'Service SAE',
-            type: 'link',
-            state: 'home.serviceSae',
-            icon: 'fa fa-sellsy'
-        }
+          }
     ];
 
     return {

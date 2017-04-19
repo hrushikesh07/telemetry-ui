@@ -7,10 +7,19 @@
                 serSae.filter= {
                 };
                 serSae.expendIn=null;
-                serSae.subData=[];
+                $scope.subData=[];
                 serSae.expIcon={};
+                serSae.instDet={};
+                $scope.instances=[];
                 serSae.ini=function () {
                     serSae.getInstances();
+                    telemetryService.promiseGet('/instances').then(function (response) {
+                        serSae.subInstance = response;
+                        angular.forEach(serSae.subInstance,function (val) {
+                            serSae.instDet[val.id]= {ip:val.ipAddress, name:val.name};
+                        });
+                    }, function () {
+                    });
                 };
                 serSae.getInstances = function () {
                     $scope.dataloading = true;
@@ -49,20 +58,22 @@
                     }
 
                     telemetryService.promiseGet(url).then(function (response) {
-                        serSae.instances = response;
+                        $scope.instances = response;
                         $scope.dataloading = false;
                     }, function () {
                     });
                 };
                 serSae.expendRow =function (id) {
+                    $scope.subData=[];
+                    $scope.dataloadingSub = true;
                     serSae.expIcon={};
                     serSae.expendIn=id;
                     serSae.expIcon[id]=true;
-                    //telemetryService.promiseGet('/services/'+id+'/resources').then(function (response) {
-                    //     serSae.instances = response;
-                    //     $scope.dataloading = false;
-                    // }, function () {
-                    // });
+                    telemetryService.promiseGet('/resources?serviceMap='+id).then(function (response) {
+                        $scope.subData = response;
+                        $scope.dataloadingSub = false;
+                    }, function () {
+                    });
                 };
                 serSae.collapseRow=function (id) {
                     serSae.expendIn=null;
@@ -89,6 +100,33 @@
 
                     });
                 };
+            $scope.$on('listServices', function (event, args) {
+                var data = args.message;
+                var checkNew=true;
+                angular.forEach($scope.instances,function (val,key) {
+                    if(val.name === data[0].name){
+                        checkNew=false;
+                    }
+                    if(val.name === data[0].name && val.status !== data[0].status ){
+                        $scope.instances[key].status=data[0].status;
+                    }
+                });
+                if(checkNew){
+                    $scope.instances.push(data[0]);
+                    $scope.$apply();
+                }
+            });
+            $scope.$on('listResources', function (event, args) {
+                var data = args.message;
+                console.log(data[0].id);
+                angular.forEach($scope.subData,function (val,key) {
+                    if(val.id === data[0].id && val.status !== data[0].status ){
+                        $scope.subData[key].status=data[0].status;
+                        $scope.$apply();
+                    }
+                });
+
+            });
             serSae.ini();
         }]);
 })();

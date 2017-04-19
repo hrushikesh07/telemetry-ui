@@ -36,6 +36,12 @@
                 case "listInstances":
                     $scope.$broadcast('listInstancesEvent', {message: parsedJson.messageBody});
                     break;
+                case "services":
+                    $scope.$broadcast('listServices', {message: parsedJson.messageBody});
+                    break;
+                case "resources":
+                    $scope.$broadcast('listResources', {message: parsedJson.messageBody});
+                    break;
                 case "monitoring":
                     telemetryService.updateInstanceMetrics(parsedJson.messageBody);
                     $scope.$broadcast('monitoringEvent');

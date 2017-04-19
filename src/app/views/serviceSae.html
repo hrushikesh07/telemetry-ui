@@ -12,7 +12,7 @@
             <h3 class="box-title"><i class="fa fa-fw fa-filter"></i>Filter By</h3>
             <div class="box-tools pull-right">
                 <button type="button" ng-click="serSae.resetFilter()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-fw fa-refresh"></i>Reset</button>
-                <button type="button" ng-click="serSae.addNewService()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa fa-plus"></i>Add</button>
+                <!--<button type="button" ng-click="serSae.addNewService()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa fa-plus"></i>Add</button>-->
 
             </div>
         </div>
@@ -48,11 +48,11 @@
                                     <!--</button>-->
                                 </div>
 
-                                <div class="col-lg-3 col-md-3 margintop15" >
-                                    <label>Service Map:
-                                    </label>
-                                    <input class="form-control" placeholder="Search by service map" ng-model="serSae.filter.serviceMap" ng-model-options="{debounce: 200}"  />
-                                </div>
+                                <!--<div class="col-lg-3 col-md-3 margintop15" >-->
+                                    <!--<label>Service Map:-->
+                                    <!--</label>-->
+                                    <!--<input class="form-control" placeholder="Search by service map" ng-model="serSae.filter.serviceMap" ng-model-options="{debounce: 200}"  />-->
+                                <!--</div>-->
 
                             <div class="col-lg-3 col-md-3 margintop15" style="padding-top: 26px;" >
                                 <button type="button" title="Search" class="btn btn-xs btn-search" ng-click="serSae.getInstances('')">
@@ -82,20 +82,20 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Status</th>
+                <th width="200">Status</th>
                 <!--<th>ID</th>-->
                 <th>Name</th>
-                <th>Service Map</th>
+              <!--  <th>Service Map</th>-->
                 <th>Creation Time</th>
-                <th>Last Updation Time</th>
+               <!-- <th>Last Updation Time</th>-->
                 <!--<th>Metrics</th>-->
             </tr>
             </thead>
-            <tbody ng-if="!dataloading" ng-repeat="data in serSae.instances| orderBy: 'creationTime': true">
+            <tbody ng-if="!dataloading" ng-repeat="data in instances| orderBy: 'creationTime': true">
                     <tr>
                         <th>
-                            <i ng-hide="serSae.expIcon[data.id]" ng-click="serSae.expendRow(data.id)" class="fa fa-plus-square" style="cursor: pointer" aria-hidden="true"></i>
-                            <i ng-hide="!serSae.expIcon[data.id]" ng-click="serSae.collapseRow(data.id)" class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
+                            <i ng-hide="serSae.expIcon[data.name]" ng-click="serSae.expendRow(data.name)" class="fa fa-plus-square" style="cursor: pointer" aria-hidden="true"></i>
+                            <i ng-hide="!serSae.expIcon[data.name]" ng-click="serSae.collapseRow(data.name)" class="fa fa-minus-square" style="cursor: pointer" aria-hidden="true"></i>
                         </th>
 
                         <td data-title="Status" ng-switch on="data.status">
@@ -110,34 +110,49 @@
                         </td>
 
                         <td data-title=" Name">{{data.name}}</td>
-                        <td data-title="Service Map">{{data.serviceMap}}</td>
+                       <!-- <td data-title="Service Map">{{data.serviceMap}}</td>-->
                         <td data-title="Creation Time">{{data.creationTime| date:'medium'}}</td>
-                        <td data-title="Last Updation Time">{{data.lastUpdationTime| date:'medium'}}</td>
+                        <!--<td data-title="Last Updation Time">{{data.lastUpdationTime| date:'medium'}}</td>-->
                     </tr>
-                    <tr ng-if="serSae.expendIn=== data.id ">
+                    <tr ng-if="serSae.expendIn=== data.name ">
                         <td colspan="7">
-                            <table  class="table table-hover table-bordered text-center">
+                            <table  class="table table-hover table-bordered" width="70%">
                                 <thead>
                                 <tr >
-                                    <th>ID</th>
+                                    <th width="200">Status</th>
+                                    <th width="250">Name</th>
+                                    <th width="250">IP Address </th>
                                     <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Event</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr  ng-if="serSae.subData && serSae.subData.length >0 && serSae.expendIn=== data.id " ng-repeat="subData in serSae.subData">
-                                        <th colspan="2">ID</th>
-                                        <th colspan="2">Type</th>
-                                        <th colspan="3">Status</th>
+                                    <tr  ng-if="subData && subData.length >0 && serSae.expendIn=== data.name " ng-repeat="subD in subData">
+
+                                        <td data-title="Status" ng-switch on="subD.status">
+                                            <span ng-switch-when="0" class="txt-aqua" uib-tooltip="Info">
+                                            <i class="fa fa-fw fa-square"></i></span>
+                                                            <span ng-switch-when="1" class="txt-warning" uib-tooltip="Warning">
+                                            <i class="fa fa-fw fa-square"></i></span>
+                                                            <span ng-switch-when="2" class="txt-criticle" uib-tooltip="Critical">
+                                            <i class="fa fa-fw fa-square"></i></span>
+                                                            <span ng-switch-when="3" class="txt-purple" uib-tooltip="Error">
+                                            <i class="fa fa-fw fa-square"></i></span>
+                                        </td>
+                                        <td ><a ui-sref="home.sae({ instanceId: subD.id})">{{serSae.instDet[subD.id].ip}}</a></td>
+                                        <td ><a ui-sref="home.sae({ instanceId: subD.id})">{{serSae.instDet[subD.id].name}}</a></td>
+                                        <td >{{subD.type}}</td>
+                                        <td>
+                                            <a ui-sref="home.events({instanceId: subD.id,checkStatus:subD.status})"><i class="fa fa-eye" title="Go to events" aria-hidden="true"></i></a>
+                                        </td>
                                     </tr>
-                                    <tr ng-if="serSae.subData.length === 0 && serSae.expendIn === data.id">
+                                    <tr ng-if="!dataloadingSub && subData.length === 0 && serSae.expendIn === data.name">
                                         <td colspan="9" class="txt-red text-center">
                                             No Data Found
                                         </td>
                                     </tr>
 
-                                    <tr ng-if="dataloadingSub && serSae.expendIn=== data.id">
+                                    <tr ng-if="dataloadingSub && serSae.expendIn=== data.name">
                                         <td colspan="9" class="txt-theme text-center">
                                             <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                                         </td>
@@ -151,7 +166,7 @@
 
             </tbody>
 
-            <tbody ng-if="!dataloading && serSae.instances.length === 0">
+            <tbody ng-if="!dataloading && instances.length === 0">
                 <tr >
                     <td colspan="9" class="txt-red text-center" >
                         No Data Found

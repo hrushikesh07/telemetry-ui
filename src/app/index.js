@@ -48,7 +48,7 @@ angular.module('catalystTelemetryApp', ['ngAnimate', 'ngCookies', 'ngTouch',
                 }
             })
             .state('home.sae', {
-                url: '/sae/:instanceId',
+                url: '/sae/:instanceId/:status',
                 controller: 'SAEController',
                 controllerAs: 'vm',
                 templateUrl: 'app/views/sae.html',

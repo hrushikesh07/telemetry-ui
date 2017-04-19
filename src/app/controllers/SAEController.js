@@ -9,7 +9,7 @@
 
         $scope.currentView = 'sae';
         $scope.selectedInstance = {value: {}}
-        $scope.heatmapEventsType = 2; //2: Critical, 1: Warning
+        $scope.heatmapEventsType =$stateParams.status | 2; //2: Critical, 1: Warning
         $scope.alerts = [];
         $scope.remediationData = [];
         $scope.alertColumns = {};
